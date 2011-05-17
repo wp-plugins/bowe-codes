@@ -1,0 +1,219 @@
+# Translation of the WordPress plugin bowe-codes by imath (twitter.com/imath).
+# Copyright (C) 2010 imath (twitter.com/imath)
+# This file is distributed under the same license as bowe-codes package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bowe-codes 1.0\n"
+"Report-Msgid-Bugs-To: http://imath.owni.fr\n"
+"POT-Creation-Date: 2010-07-05 15:10+0000\n"
+"PO-Revision-Date: 2011-05-15 13:47+0100\n"
+"Last-Translator: imath <i-math@club.fr>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. #-#-#-#-#  bowe-codes.pot (bowe-codes 1.0)  #-#-#-#-#
+#: bowe-codes.php:45
+msgid "BCodes Options"
+msgstr "Options BCodes"
+
+#: bowe-codes.php:423
+#: bowe-codes.php:425
+#: bowe-codes.php:426
+msgid "From:"
+msgstr "De:"
+
+#: bowe-codes.php:667
+msgid "Add BP Content"
+msgstr "Ajouter du contenu BuddyPress"
+
+#: bowe-codes-admin.php:17
+msgid "Bowe codes options"
+msgstr "Options de Bowe Codes"
+
+#: bowe-codes-admin.php:22
+msgid "Disable default css"
+msgstr "Neutraliser la feuille de style par défaut"
+
+#: bowe-codes-admin.php:23
+#: bowe-codes-editor.php:66
+msgid "Yes"
+msgstr "Oui"
+
+#: bowe-codes-admin.php:24
+#: bowe-codes-editor.php:67
+msgid "No"
+msgstr "Non"
+
+#: bowe-codes-admin.php:27
+msgid "Save"
+msgstr "Enregistrer"
+
+#: bowe-codes-admin.php:33
+msgid "Content of default.css (for info)"
+msgstr "Contenu de la feuille de style par défaut (pour info)"
+
+#: bowe-codes-editor.php:68
+msgid "Show"
+msgstr "Afficher"
+
+#: bowe-codes-editor.php:69
+msgid "Hide"
+msgstr "Masquer"
+
+#: bowe-codes-editor.php:70
+msgid "Avatar"
+msgstr "Avatar"
+
+#: bowe-codes-editor.php:71
+msgid "Avatar size (in pixels)"
+msgstr "Taille en pixels de l'avatar"
+
+#: bowe-codes-editor.php:72
+msgid "Class"
+msgstr "Classe css"
+
+#: bowe-codes-editor.php:73
+msgid "Insert"
+msgstr "Insérer"
+
+#: bowe-codes-editor.php:74
+msgid "Amount"
+msgstr "Nombre"
+
+#: bowe-codes-editor.php:75
+msgid "Type"
+msgstr "Type"
+
+#: bowe-codes-editor.php:76
+msgid "Popular"
+msgstr "Populaire"
+
+#: bowe-codes-editor.php:77
+msgid "Newest"
+msgstr "Plus récent"
+
+#: bowe-codes-editor.php:78
+msgid "Active"
+msgstr "Plus actif"
+
+#: bowe-codes-editor.php:83
+msgid "List of Available Bowe Codes"
+msgstr "Liste des shortcodes disponibles"
+
+#: bowe-codes-editor.php:87
+msgid "ShortCode Name"
+msgstr "Nom du shortcode"
+
+#: bowe-codes-editor.php:88
+msgid "Actions"
+msgstr "Actions"
+
+#: bowe-codes-editor.php:100
+msgid "Displays a specific member."
+msgstr "Montre un membre spécifique"
+
+#: bowe-codes-editor.php:118
+msgid "Member login"
+msgstr "Login du membre"
+
+#: bowe-codes-editor.php:126
+msgid "xprofile fields (comma separated list without spaces between commas)"
+msgstr "Champs xprofile (liste de champs séparés par des virgules sans espaces entre les virgules)"
+
+#: bowe-codes-editor.php:145
+msgid "Displays a specific group."
+msgstr "Montre un groupe en particulier"
+
+#: bowe-codes-editor.php:163
+msgid "Group slug"
+msgstr "Slug du groupe"
+
+#: bowe-codes-editor.php:171
+msgid "Group description"
+msgstr "Description du groupe"
+
+#: bowe-codes-editor.php:191
+msgid "Displays groups with or without avatars."
+msgstr "Montre des groupes en affichant ou non leurs avatars"
+
+#: bowe-codes-editor.php:221
+msgid "Featured groups (comma separated list of group slugs without spaces between commas)"
+msgstr "Groupes en vedette (liste de slugs de groupe séparés par des virgules sans espaces entre les virgules)"
+
+#: bowe-codes-editor.php:229
+msgid "Custom title/content"
+msgstr "Titre ou contenu personnalisé"
+
+#: bowe-codes-editor.php:248
+msgid "Displays members with or without avatars."
+msgstr "Affiche des membres avec ou sans avatars"
+
+#: bowe-codes-editor.php:277
+msgid "Featured members (comma separated list of member logins without spaces between commas)"
+msgstr "Membres en vedette (liste de logins séparés par des virgules sans espace entre les virgules)"
+
+#: bowe-codes-editor.php:300
+msgid "Displays the friends of the current logged in user, or the friends of the member profile currently being viewed."
+msgstr "Affiche les amis du membre connecté, ou ceux du membre affiché dont le profil est consulté."
+
+#: bowe-codes-editor.php:333
+msgid "Dynamic (show friends of displayed member if viewing his profile)"
+msgstr "Dynamique (montre les amis du membre affiché lorsque son profil est consulté)"
+
+#: bowe-codes-editor.php:353
+msgid "Displays the groups of the currently logged in user or the groups of the member profile currently being viewed."
+msgstr "Montre les groupes du membre connecté ou de ceux du membre affiché si son profil est consulté."
+
+#: bowe-codes-editor.php:387
+msgid "Dynamic (show groups of displayed member if viewing his profile)"
+msgstr "Dynamique (montre les groupes du membre affiché lorsque son profil est consulté)"
+
+#: bowe-codes-editor.php:407
+msgid "Displays the latest messages from the currently logged in user."
+msgstr "Affiche les derniers messages du membre connecté"
+
+#: bowe-codes-editor.php:420
+msgid "Subject"
+msgstr "Objet"
+
+#: bowe-codes-editor.php:434
+#: bowe-codes-editor.php:590
+msgid "Excerpt (number of words)"
+msgstr "Résumé (nombre de mots)"
+
+#: bowe-codes-editor.php:457
+msgid "Displays the latest notifications from the currently logged in user."
+msgstr "Affiche les dernières notifications du membre connecté."
+
+#: bowe-codes-editor.php:499
+msgid "Shows blogs from across the site."
+msgstr "Montre les blogs du réseau de blogs."
+
+#: bowe-codes-editor.php:528
+msgid "Featured blogs (comma separated list of blog ids without spaces between commas)"
+msgstr "Blogs en vedette (liste d'identifiants - id - de blog séparés par des virgules, sans espace entre les virgules)"
+
+#: bowe-codes-editor.php:536
+msgid "Blog description"
+msgstr "Description du blog"
+
+#: bowe-codes-editor.php:557
+msgid "Shows posts from across the site."
+msgstr "Affiche des articles des blogs du réseau"
+
+#: bowe-codes-editor.php:582
+msgid "Random"
+msgstr "Aléatoire"
+
+#: bowe-codes-editor.php:627
+msgid "Please type the login of a member"
+msgstr "Merci de renseigner un login de membre"
+
+#: bowe-codes-editor.php:646
+msgid "Please type the slug of a group"
+msgstr "Merci de renseigner un slug de groupe"
+
