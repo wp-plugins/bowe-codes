@@ -4,7 +4,7 @@ Donate link: http://imath.owni.fr/
 Tags: BuddyPress, shortcode, post, template, widget
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 Allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using shortcodes.
 
