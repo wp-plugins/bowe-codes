@@ -8,51 +8,57 @@ msgstr ""
 "Project-Id-Version: bowe-codes 1.0\n"
 "Report-Msgid-Bugs-To: http://imath.owni.fr\n"
 "POT-Creation-Date: 2010-07-05 15:10+0000\n"
-"PO-Revision-Date: 2011-05-15 13:47+0100\n"
+"PO-Revision-Date: 2011-11-11 15:09+0100\n"
 "Last-Translator: imath <i-math@club.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. #-#-#-#-#  bowe-codes.pot (bowe-codes 1.0)  #-#-#-#-#
-#: bowe-codes.php:45
+#. #-#-#-#-#  bowe-codes.pot (bowe-codes 1.1)  #-#-#-#-#
+#: bowe-codes.php:44
 msgid "BCodes Options"
 msgstr "Options BCodes"
 
-#: bowe-codes.php:423
-#: bowe-codes.php:425
-#: bowe-codes.php:426
+#: bowe-codes.php:431
+#: bowe-codes.php:433
+#: bowe-codes.php:434
 msgid "From:"
 msgstr "De:"
 
-#: bowe-codes.php:667
+#: bowe-codes.php:683
 msgid "Add BP Content"
 msgstr "Ajouter du contenu BuddyPress"
 
-#: bowe-codes-admin.php:17
+#: bowe-codes-admin.php:22
 msgid "Bowe codes options"
 msgstr "Options de Bowe Codes"
 
-#: bowe-codes-admin.php:22
+#: bowe-codes-admin.php:27
 msgid "Disable default css"
 msgstr "Neutraliser la feuille de style par défaut"
 
-#: bowe-codes-admin.php:23
+#: bowe-codes-admin.php:28
+#: bowe-codes-admin.php:34
 #: bowe-codes-editor.php:66
 msgid "Yes"
 msgstr "Oui"
 
-#: bowe-codes-admin.php:24
+#: bowe-codes-admin.php:29
+#: bowe-codes-admin.php:35
 #: bowe-codes-editor.php:67
 msgid "No"
 msgstr "Non"
 
-#: bowe-codes-admin.php:27
+#: bowe-codes-admin.php:33
+msgid "Hide button for child blogs"
+msgstr "Cacher le bouton aux blogs enfants"
+
+#: bowe-codes-admin.php:39
 msgid "Save"
 msgstr "Enregistrer"
 
-#: bowe-codes-admin.php:33
+#: bowe-codes-admin.php:45
 msgid "Content of default.css (for info)"
 msgstr "Contenu de la feuille de style par défaut (pour info)"
 

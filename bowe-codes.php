@@ -3,9 +3,9 @@
 Plugin Name: Bowe Codes
 Plugin URI: http://imath.owni.fr/2011/05/15/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/
-Version: 1.0
+Version: 1.1
 Requires at least: 3.0
-Tested up to: 3.1.2
+Tested up to: 3.2.1
 License: GNU/GPL 2
 Author: imath
 Author URI: http://imath.owni.fr/
@@ -16,7 +16,7 @@ Network: true
 define ( 'BOWE_CODES_PLUGIN_NAME', 'bowe-codes' );
 define ( 'BOWE_CODES_PLUGIN_URL', WP_PLUGIN_URL . '/' . BOWE_CODES_PLUGIN_NAME );
 define ( 'BOWE_CODES_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . BOWE_CODES_PLUGIN_NAME );
-define ( 'BOWE_CODES_VERSION', '1.0' );
+define ( 'BOWE_CODES_VERSION', '1.1' );
 
 
 /**
@@ -51,6 +51,7 @@ function bowe_codes_load_default_css(){
 	else $bc_option = get_option('bc_default_css');
 	if($bc_option!="yes"){
 		wp_enqueue_style('bowe-codes-css', BOWE_CODES_PLUGIN_URL.'/css/default.css');
+		wp_enqueue_script('bowe-codes-js', BOWE_CODES_PLUGIN_URL.'/js/bowe-codes-fix.js', array('jquery'));
 	}
 }
 
@@ -347,7 +348,7 @@ function bowe_codes_members_tag($args=''){
 		}
 	}
 	
-	if($user_id!=0 && $dynamic && bp_is_member()) $user_id = $bp->displayed_user->id;
+	if($user_id!=0 && $dynamic && bowe_codes_is_user()) $user_id = $bp->displayed_user->id;
 	elseif($user_id!=0) $user_id = $bp->loggedin_user->id;
 	
 	if(bp_has_members( 'user_id='.$user_id.'&type=' . $type . '&max=' . $amount )){
@@ -676,9 +677,37 @@ function bowe_codes_blog_posts_tag($args=''){
 add_action('media_buttons', 'bowe_codes_add_media_button', 20);
 
 function bowe_codes_add_media_button() {
-	$url = BOWE_CODES_PLUGIN_URL.'/includes/bowe-codes-editor.php?tab=add&TB_iframe=true&amp;height=500&amp;width=640';
-	if (is_ssl()) $url = str_replace( 'http://', 'https://',  $url );
-	echo '<a href="'.$url.'" class="thickbox" title="'.__('Add BP Content','bowe-codes').'"><img src="'.BOWE_CODES_PLUGIN_URL.'/images/bowe-codes-btn.png" alt="'.__('Add BP Content','bowe-codes').'" width="74px" height="16px"></a>';
+	if(bowe_codes_can_child_blogs()){
+		$url = BOWE_CODES_PLUGIN_URL.'/includes/bowe-codes-editor.php?tab=add&TB_iframe=true&amp;height=500&amp;width=640';
+		if (is_ssl()) $url = str_replace( 'http://', 'https://',  $url );
+		echo '<a href="'.$url.'" class="thickbox" title="'.__('Add BP Content','bowe-codes').'"><img src="'.BOWE_CODES_PLUGIN_URL.'/images/bowe-codes-btn.png" alt="'.__('Add BP Content','bowe-codes').'" width="74px" height="16px"></a>';
+	}
+}
+
+/**
+* taking care of deprecated since BP 1.5
+*/
+function bowe_codes_is_user(){
+	if( defined( 'BP_VERSION' ) && version_compare( BP_VERSION, '1.5-beta-1', '<' ) ){
+		return bp_is_member();
+	}
+	else return bp_is_user();
+}
+
+/**
+* checking if super admin allows child blogs to use it
+*/
+function bowe_codes_can_child_blogs(){
+	if(!is_multisite())
+		return true;
+		
+	global $blog_id;
+	if(function_exists('get_blog_option')) $bc_option = get_blog_option('1', 'bc_enable_network');
+	else $bc_option = get_option('bc_enable_network');
+	if( $blog_id != 1 && $bc_option == "yes" && !is_super_admin()){
+		return false;
+	}
+	else return true;
 }
 
 /**
