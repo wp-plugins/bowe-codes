@@ -3,7 +3,7 @@ Contributors: imath, bowromir
 Donate link: http://imath.owni.fr/
 Tags: BuddyPress, shortcode, post, template, widget
 Requires at least: 3.0
-Tested up to: 3.1.2
+Tested up to: 3.2.1
 Stable tag: 1.0
 
 Allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using shortcodes.
@@ -38,10 +38,18 @@ Please add a comment <a href="http://imath.owni.fr/2011/05/15/bowe-codes/">here<
 
 == Changelog ==
 
+= 1.1 =
+* css changes by bowromir
+* bp_is_member is replaced by bp_is_user if BuddyPress > 1.5
+* super admin can now hide the button to child blogs from Bowe Codes Options
+
 = 1.0 =
 * BP content shortcodes
 
 == Upgrade Notice ==
+
+= 1.0 =
+nothing particular..
 
 = 1.0 =
 no upgrades, just a first install..
