@@ -1,12 +1,12 @@
 # Translation of the WordPress plugin bowe-codes by imath (twitter.com/imath).
-# Copyright (C) 2011 imath (twitter.com/imath)
+# Copyright (C) 2012 imath (twitter.com/imath)
 # This file is distributed under the same license as bowe-codes package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: bowe-codes 1.1\n"
+"Project-Id-Version: bowe-codes 1.2\n"
 "Report-Msgid-Bugs-To: http://imath.owni.fr\n"
 "POT-Creation-Date: 2010-07-05 15:10+0000\n"
 "PO-Revision-Date: 2010-09-26 12:53+0000\n"
@@ -16,17 +16,29 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. #-#-#-#-#  bowe-codes.pot (bowe-codes 1.1)  #-#-#-#-#
+#. #-#-#-#-#  bowe-codes.pot (bowe-codes 1.2)  #-#-#-#-#
 
-#: bowe-codes.php:44
+#: bowe-codes.php:46
 msgid "BCodes Options"
 msgstr ""
 
-#: bowe-codes.php:431 bowe-codes.php:433 bowe-codes.php:434
+#: bowe-codes.php:436 bowe-codes.php:438 bowe-codes.php:439
 msgid "From:"
 msgstr ""
 
-#: bowe-codes.php:683
+#: bowe-codes.php:715
+msgid "You must be loggedin to access to this content"
+msgstr ""
+
+#: bowe-codes.php:731
+msgid "You must be a member of the group %s to access this content"
+msgstr ""
+
+#: bowe-codes.php:797
+msgid "In reply to:"
+msgstr ""
+
+#: bowe-codes.php:821
 msgid "Add BP Content"
 msgstr ""
 
@@ -38,11 +50,11 @@ msgstr ""
 msgid "Disable default css"
 msgstr ""
 
-#: bowe-codes-admin.php:28 bowe-codes-admin.php:34 bowe-codes-editor.php:66
+#: bowe-codes-admin.php:28 bowe-codes-admin.php:34 bowe-codes-editor.php:43
 msgid "Yes"
 msgstr ""
 
-#: bowe-codes-admin.php:29 bowe-codes-admin.php:35 bowe-codes-editor.php:67
+#: bowe-codes-admin.php:29 bowe-codes-admin.php:35 bowe-codes-editor.php:44
 msgid "No"
 msgstr ""
 
@@ -58,162 +70,190 @@ msgstr ""
 msgid "Content of default.css (for info)"
 msgstr ""
 
-#: bowe-codes-editor.php:68
+#: bowe-codes-editor.php:45
 msgid "Show"
 msgstr ""
 
-#: bowe-codes-editor.php:69
+#: bowe-codes-editor.php:46
 msgid "Hide"
 msgstr ""
 
-#: bowe-codes-editor.php:70
+#: bowe-codes-editor.php:47
 msgid "Avatar"
 msgstr ""
 
-#: bowe-codes-editor.php:71
+#: bowe-codes-editor.php:48
 msgid "Avatar size (in pixels)"
 msgstr ""
 
-#: bowe-codes-editor.php:72
+#: bowe-codes-editor.php:49
 msgid "Class"
 msgstr ""
 
-#: bowe-codes-editor.php:73
+#: bowe-codes-editor.php:50
 msgid "Insert"
 msgstr ""
 
-#: bowe-codes-editor.php:74
+#: bowe-codes-editor.php:51
 msgid "Amount"
 msgstr ""
 
-#: bowe-codes-editor.php:75
+#: bowe-codes-editor.php:52
 msgid "Type"
 msgstr ""
 
-#: bowe-codes-editor.php:76
+#: bowe-codes-editor.php:53
 msgid "Popular"
 msgstr ""
 
-#: bowe-codes-editor.php:77
+#: bowe-codes-editor.php:54
 msgid "Newest"
 msgstr ""
 
-#: bowe-codes-editor.php:78
+#: bowe-codes-editor.php:55
 msgid "Active"
 msgstr ""
 
-#: bowe-codes-editor.php:83
+#: bowe-codes-editor.php:60
 msgid "List of Available Bowe Codes"
 msgstr ""
 
-#: bowe-codes-editor.php:87
+#: bowe-codes-editor.php:64
 msgid "ShortCode Name"
 msgstr ""
 
-#: bowe-codes-editor.php:88
+#: bowe-codes-editor.php:65
 msgid "Actions"
 msgstr ""
 
-#: bowe-codes-editor.php:100
+#: bowe-codes-editor.php:77
 msgid "Displays a specific member."
 msgstr ""
 
-#: bowe-codes-editor.php:118
+#: bowe-codes-editor.php:95
 msgid "Member login"
 msgstr ""
 
-#: bowe-codes-editor.php:126
+#: bowe-codes-editor.php:103
 msgid "xprofile fields (comma separated list without spaces between commas)"
 msgstr ""
 
-#: bowe-codes-editor.php:145
+#: bowe-codes-editor.php:122
 msgid "Displays a specific group."
 msgstr ""
 
-#: bowe-codes-editor.php:163
+#: bowe-codes-editor.php:140
 msgid "Group slug"
 msgstr ""
 
-#: bowe-codes-editor.php:171
+#: bowe-codes-editor.php:148
 msgid "Group description"
 msgstr ""
 
-#: bowe-codes-editor.php:191
+#: bowe-codes-editor.php:168
 msgid "Displays groups with or without avatars."
 msgstr ""
 
-#: bowe-codes-editor.php:221
+#: bowe-codes-editor.php:198
 msgid "Featured groups (comma separated list of group slugs without spaces between commas)"
 msgstr ""
 
-#: bowe-codes-editor.php:229
+#: bowe-codes-editor.php:206
 msgid "Custom title/content"
 msgstr ""
 
-#: bowe-codes-editor.php:248
+#: bowe-codes-editor.php:225
 msgid "Displays members with or without avatars."
 msgstr ""
 
-#: bowe-codes-editor.php:277
+#: bowe-codes-editor.php:254
 msgid "Featured members (comma separated list of member logins without spaces between commas)"
 msgstr ""
 
-#: bowe-codes-editor.php:300
+#: bowe-codes-editor.php:277
 msgid "Displays the friends of the current logged in user, or the friends of the member profile currently being viewed."
 msgstr ""
 
-#: bowe-codes-editor.php:333
+#: bowe-codes-editor.php:310
 msgid "Dynamic (show friends of displayed member if viewing his profile)"
 msgstr ""
 
-#: bowe-codes-editor.php:353
+#: bowe-codes-editor.php:330
 msgid "Displays the groups of the currently logged in user or the groups of the member profile currently being viewed."
 msgstr ""
 
-#: bowe-codes-editor.php:387
+#: bowe-codes-editor.php:364
 msgid "Dynamic (show groups of displayed member if viewing his profile)"
 msgstr ""
 
-#: bowe-codes-editor.php:407
+#: bowe-codes-editor.php:384
 msgid "Displays the latest messages from the currently logged in user."
 msgstr ""
 
-#: bowe-codes-editor.php:420
+#: bowe-codes-editor.php:397
 msgid "Subject"
 msgstr ""
 
-#: bowe-codes-editor.php:434 bowe-codes-editor.php:590
+#: bowe-codes-editor.php:411 bowe-codes-editor.php:567 bowe-codes-editor.php:657
 msgid "Excerpt (number of words)"
 msgstr ""
 
-#: bowe-codes-editor.php:457
+#: bowe-codes-editor.php:434
 msgid "Displays the latest notifications from the currently logged in user."
 msgstr ""
 
-#: bowe-codes-editor.php:499
+#: bowe-codes-editor.php:476
 msgid "Shows blogs from across the site."
 msgstr ""
 
-#: bowe-codes-editor.php:528
+#: bowe-codes-editor.php:505
 msgid "Featured blogs (comma separated list of blog ids without spaces between commas)"
 msgstr ""
 
-#: bowe-codes-editor.php:536
+#: bowe-codes-editor.php:513
 msgid "Blog description"
 msgstr ""
 
-#: bowe-codes-editor.php:557
+#: bowe-codes-editor.php:534
 msgid "Shows posts from across the site."
 msgstr ""
 
-#: bowe-codes-editor.php:582
+#: bowe-codes-editor.php:559
 msgid "Random"
 msgstr ""
 
-#: bowe-codes-editor.php:627
+#: bowe-codes-editor.php:587
+msgid "Restrict post content to group members"
+msgstr ""
+
+#: bowe-codes-editor.php:595 bowe-codes-editor.php:628
+msgid "Group id or slug"
+msgstr ""
+
+#: bowe-codes-editor.php:620
+msgid "Shows latest forum topics or replies."
+msgstr ""
+
+#: bowe-codes-editor.php:648
+msgid "Forum topics"
+msgstr ""
+
+#: bowe-codes-editor.php:649
+msgid "Forum replies"
+msgstr ""
+
+#: bowe-codes-editor.php:693
 msgid "Please type the login of a member"
 msgstr ""
 
-#: bowe-codes-editor.php:646
+#: bowe-codes-editor.php:712
 msgid "Please type the slug of a group"
+msgstr ""
+
+#: bowe-codes-editor.php:888
+msgid "Please type the id or slug of a group"
+msgstr ""
+
+#: bowe-codes-editor.php:896
+msgid "The content to hide"
 msgstr ""

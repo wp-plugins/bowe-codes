@@ -10,7 +10,8 @@
 .my_messages,
 .my_notifications,
 .my_blogs,
-.my_blog_posts { margin-bottom: 20px }
+.my_blog_posts, 
+.my_forum { margin-bottom: 20px }
 .my_member-ul,
 .my_members-ul,
 .my_group-ul,
@@ -20,7 +21,8 @@
 .my_messages-ul,
 .my_notifications-ul,
 .my_blogs-ul,
-.my_blog_posts-ul {
+.my_blog_posts-ul,
+.my_forum-ul {
     list-style: none!important;
     margin: 0px!important;
     border-bottom: 1px solid #F1F1F1;
@@ -34,7 +36,8 @@
 .my_messages-ul li,
 .my_notifications-ul li,
 .my_blogs-ul li,
-.my_blog_posts-ul li {
+.my_blog_posts-ul li,
+.my_forum-ul li {
     margin-left: 0px;
     clear: both;
     list-style: none outside none;
@@ -49,7 +52,8 @@
 .my_messages .bc_avatar,
 .my_notifications .bc_avatar,
 .my_blogs .bc_avatar,
-.my_blog_posts .bc_avatar {
+.my_blog_posts .bc_avatar, 
+.my_forum .bc_avatar {
     float: left;
     padding: 10px 10px 0 10px;
 }
@@ -62,7 +66,8 @@
 .my_friends .user-infos,
 .user_groups .group-infos,
 .my_blogs .blog-infos,
-.my_blog_posts .post-infos {
+.my_blog_posts .post-infos,
+.my_forum .forum-infos {
     margin-left: 70px;
     padding: 5px;
 }
@@ -78,13 +83,15 @@
 .my_friends .user-infos h4 a,
 .user_groups .group-infos h4 a,
 .my_blogs .blog-infos h4 a,
-.my_blog_posts .post-infos a { color: #555 }
+.my_blog_posts .post-infos a,
+.my_forum .forum-infos a { color: #555 }
 .my_member .user-infos p,
 .my_group .group-infos p,
 .my_messages .message-infos p,
 .my_notifications .notification-infos p,
 .my_blogs .blog-infos p,
-.my_blog_posts .post-infos p { margin-bottom: 5px!important }
+.my_blog_posts .post-infos p,
+.my_forum .forum-infos p { margin-bottom: 5px!important }
 .my_notifications .notification-infos p.bc_notifications { padding-top: 20px }
 .my_member .user-infos .xprofile_thead {
     display: block;
@@ -101,3 +108,4 @@
 .my_groups h3 { text-align: center }
 .bc_subject,
 .bc_from { display: block }
+.my_restrict_message { display: block;border:solid 1px #E1CA82;border-radius:3px;padding: 10px 15px;background-color: #FFEAA6; width:80%; margin:1em auto }
