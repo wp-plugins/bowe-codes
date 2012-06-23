@@ -2,10 +2,10 @@
 /*
 Plugin Name: Bowe Codes
 Plugin URI: http://imath.owni.fr/2011/05/15/bowe-codes/
-Description: adds BuddyPress specific shortcodes to display members/groups/blogs/
-Version: 1.1
+Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
+Version: 1.2
 Requires at least: 3.0
-Tested up to: 3.2.1
+Tested up to: 3.4
 License: GNU/GPL 2
 Author: imath
 Author URI: http://imath.owni.fr/
@@ -16,7 +16,7 @@ Network: true
 define ( 'BOWE_CODES_PLUGIN_NAME', 'bowe-codes' );
 define ( 'BOWE_CODES_PLUGIN_URL', WP_PLUGIN_URL . '/' . BOWE_CODES_PLUGIN_NAME );
 define ( 'BOWE_CODES_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . BOWE_CODES_PLUGIN_NAME );
-define ( 'BOWE_CODES_VERSION', '1.1' );
+define ( 'BOWE_CODES_VERSION', '1.2' );
 
 
 /**
@@ -41,7 +41,9 @@ function bowe_codes_add_admin_menu() {
 
 	require ( dirname( __FILE__ ) . '/includes/bowe-codes-admin.php' );
 	
-	add_submenu_page( 'bp-general-settings', __( 'BCodes Options', 'bowe-codes' ), __( 'BCodes Options', 'bowe-codes' ), 'manage_options', 'bcodes-admin', 'bowe_codes_options' );
+	$admin_page = bowe_codes_16_new_admin();
+	
+	add_submenu_page( $admin_page, __( 'BCodes Options', 'bowe-codes' ), __( 'BCodes Options', 'bowe-codes' ), 'manage_options', 'bcodes-admin', 'bowe_codes_options' );
 }
 
 add_action( bowe_codes_is_django_multisite() ? 'network_admin_menu' : 'admin_menu', 'bowe_codes_add_admin_menu', 14 );
@@ -68,7 +70,10 @@ add_action('admin_print_styles','bowe_codes_load_admin_css');
 * renders html for a given group
 */
 function bowe_codes_html_group($id, $name, $slug, $size="50", $avatar=false, $desc=false){
-	$group_home = $bp->root_domain.'/'.BP_GROUPS_SLUG.'/'.$slug.'/';
+	
+	$group = groups_get_group( 'group_id='.$id );
+	$group_home = bp_get_group_permalink( $group );
+	
 	$group_html ='';
 	//avatar
 	if($avatar) $group_html .= '<li><div class="bc_avatar"><a href="'.$group_home.'">'.bp_core_fetch_avatar('item_id='.$id.'&object=group&type=full&avatar_dir=group-avatars&width='.$size.'&height='.$size) . '</a></div>';
@@ -91,7 +96,7 @@ function bowe_codes_html_group($id, $name, $slug, $size="50", $avatar=false, $de
 * renders html for a given member
 */
 function bowe_codes_html_member($user_id, $name, $avatar=false, $size="50", $fields=''){
-	$user_home = $bp->root_domain.'/'.BP_MEMBERS_SLUG.'/'.$name.'/';
+	$user_home = bp_core_get_user_domain( $user_id );
 	$member_html = "";
 	
 	//avatar
@@ -671,7 +676,140 @@ function bowe_codes_blog_posts_tag($args=''){
 	return $html_blog_posts_box;
 }
 
+add_shortcode( 'bc_restrict_gm', 'bowe_code_hide_post_content');
+
+function bowe_code_hide_post_content( $atts, $content ) {
+	global $wpdb;
+
+	extract(shortcode_atts( array( 'group_id' => 0, 'class' => 'my_restrict_message' ), $atts) );
+	
+	if( !empty( $group_id) && intval( $group_id ) <= 0 ) {
+		$group_id = $wpdb->get_var("SELECT id FROM {$wpdb->base_prefix}bp_groups WHERE slug='$group_id'");
+	}
+	
+	$args = array( 'group_id' => $group_id, 'class' => $class, 'content' => $content );
+
+	return bowe_code_hide_post_content_tag( $args );
+		
+}
+
+function bowe_code_hide_post_content_tag( $args='' ) {
+	global $bp;
+	
+	$defaults = array(
+		'group_id' => false,
+		'class' => 'my_restrict_message',
+		'content' => ''
+	);
+ 
+	$r = wp_parse_args( $args, $defaults );
+	extract( $r, EXTR_SKIP );
+	
+	// if no group id content is return
+	if( empty( $group_id ) )
+		return $content;
+
+	// if user not logeddin, he's asked to
+	if( !is_user_logged_in() ) {
+		
+		$message_unlogged = '<p class="'.$class.'">' . __('You must be loggedin to access to this content', 'bowe-codes') . '</p>';
+		return apply_filters( 'bowe_code_hide_post_connect_message', $message_unlogged );
+	}
+		
+
+	$user_id = $bp->loggedin_user->id;
+
+	// if the user is a group member, let's return the content	
+	if ( groups_is_user_member( $user_id, $group_id ) )
+		return $content;
+
+	else {
+
+		$group = groups_get_group( 'group_id='.$group_id );
+		$group_home = bp_get_group_permalink( $group );
+		$group_name = $group->name;
+		$message_notgm = '<p class="'.$class.'">' . sprintf(__('You must be a member of the group %s to access this content', 'bowe-codes'), '<a href='.$group_home.'>'.$group_name.'</a>') . '</p>';
+
+		return apply_filters( 'bowe_code_hide_post_connect_message', $message_notgm, $group_id);
+
+		}
+	
+}
+
 /* enf of bc_posts shortcode functions */
+
+/* forum shortcodes */
+add_shortcode('bc_forum','bowe_codes_handle_forum_shortcode');
+
+function bowe_codes_handle_forum_shortcode($atts){
+	global $wpdb;
+	
+	extract(shortcode_atts(array('group_id' => 0,'amount'=> 5, 'avatar' => true, 'size' => 50, 'type' => 'new_forum_topic', 'class' => 'my_forum', 'excerpt' => 10), $atts));
+	
+	
+	if( !empty( $group_id) && intval( $group_id ) <= 0 ) {
+		$group_id = $wpdb->get_var("SELECT id FROM {$wpdb->base_prefix}bp_groups WHERE slug='$group_id' AND status='public'");
+	}
+	
+	return bowe_codes_forum_tag('group_id='.$group_id.'&amount='.$amount.'&avatar='.$avatar.'&size='.$size.'&type='.$type.'&class='.$class.'&excerpt='.$excerpt);
+}
+
+function bowe_codes_forum_tag($args=''){
+	global $wpdb, $bp, $activities_template;
+	$defaults = array(
+		'group_id' => 0,
+		'amount' => 5,
+		'avatar' => true,
+		'size' => 50,
+		'type' => 'new_forum_topic',
+		'class' => 'my_forum',
+		'excerpt' => 10
+	);
+	
+	
+ 
+	$r = wp_parse_args( $args, $defaults );
+	extract( $r, EXTR_SKIP );
+	
+	$table_forum = array();
+	
+	$html_forum_box = '<div class="'.$class.'">';
+	
+	if( !empty($group_id) )
+		$query = 'action='.$type.'&object=groups&primary_id='.$group_id.'&per_page=' . $amount . '&max=' . $amount;
+		
+	else
+		$query = 'action='.$type.'&per_page=' . $amount . '&max=' . $amount;
+	
+	if(bp_has_activities( $query )){
+		$html_forum_box .= '<ul class="'.$class.'-ul">';
+		$i=0;
+		
+		while ( bp_activities() ){
+			bp_the_activity();
+			
+			$html_forum_box_content = "<li>";
+			$is_reply = false;
+			
+			if($avatar) $html_forum_box_content .= '<div class="bc_avatar"><a href="'.bp_get_activity_user_link().'">'.bp_get_activity_avatar('width='.$size.'&height='.$size) . '</a></div>';
+			$html_forum_box_content .= '<div class="forum-infos">';
+			if( $type == 'new_forum_post')
+				$is_reply = '<span>'. __('In reply to:', 'bowe-codes'). ' </span>';
+			$html_forum_box_content .= '<div class="post-title">'. $is_reply .bowe_codes_parse_post_title($activities_template->activities[$i]->action).'</div>';
+			$html_forum_box_content .= '<p>'.strip_tags( bp_create_excerpt( $activities_template->activities[$i]->content, $excerpt )).'</p>';
+			$html_forum_box_content .= '</div></li>';
+			
+			$table_forum[] = $html_forum_box_content;
+			$i+=1;
+		}
+	}
+	
+	$html_forum_box .= implode('', $table_forum);
+	
+	$html_forum_box .='</ul></div>';
+	return $html_forum_box;
+}
+
 
 /* adding a thickbox to help users create their shortcode */
 add_action('media_buttons', 'bowe_codes_add_media_button', 20);
@@ -688,11 +826,23 @@ function bowe_codes_add_media_button() {
 * taking care of deprecated since BP 1.5
 */
 function bowe_codes_is_user(){
-	if( defined( 'BP_VERSION' ) && version_compare( BP_VERSION, '1.5-beta-1', '<' ) ){
+	if( defined( 'BP_VERSION' ) && version_compare( BP_VERSION, '1.5', '<' ) ){
 		return bp_is_member();
 	}
 	else return bp_is_user();
 }
+
+/**
+* BP 1.6beta1 new admin area
+*/
+function bowe_codes_16_new_admin(){
+	if( defined( 'BP_VERSION' ) && version_compare( BP_VERSION, '1.6-alpha-6041', '>=' ) ){
+		$page  = bp_core_do_network_admin()  ? 'settings.php' : 'options-general.php';
+		return $page;
+	}
+	else return 'bp-general-settings';
+}
+
 
 /**
 * checking if super admin allows child blogs to use it
@@ -742,7 +892,7 @@ add_action ( 'bp_init', 'bowe_codes_load_textdomain', 2 );
 */
 function bowe_codes_activate() {	
 	//if first install
-	if(!get_option('bowe-codes-version')){
+	if(!get_option('bowe-codes-version') || BOWE_CODES_VERSION != get_option('bowe-codes-version') ){
 		update_option( 'bowe-codes-version', BOWE_CODES_VERSION );
 	}
 }

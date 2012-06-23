@@ -11,6 +11,9 @@ jQuery(document).ready(function($){
 	$('.post-infos').each(function(){
 		bc_fix_height($(this));
 	});
+	$('.forum-infos').each(function(){
+		bc_fix_height($(this));
+	});
 	$('.message-infos').each(function(){
 		bc_fix_height($(this));
 	});

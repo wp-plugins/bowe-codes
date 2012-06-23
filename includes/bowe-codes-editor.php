@@ -1,37 +1,14 @@
 <?php
-/** Load WordPress Administration Bootstrap */
-if(file_exists('../../../wp-load.php')) {
-	require_once("../../../wp-load.php");
-} else if(file_exists('../../wp-load.php')) {
-	require_once("../../wp-load.php");
-} else if(file_exists('../wp-load.php')) {
-	require_once("../wp-load.php");
-} else if(file_exists('wp-load.php')) {
-	require_once("wp-load.php");
-} else if(file_exists('../../../../wp-load.php')) {
-	require_once("../../../../wp-load.php");
-} else if(file_exists('../../../../wp-load.php')) {
-	require_once("../../../../wp-load.php");
-} else {
+/** Load WordPress Administration Bootstrap **/
 
-	if(file_exists('../../../wp-config.php')) {
-		require_once("../../../wp-config.php");
-	} else if(file_exists('../../wp-config.php')) {
-		require_once("../../wp-config.php");
-	} else if(file_exists('../wp-config.php')) {
-		require_once("../wp-config.php");
-	} else if(file_exists('wp-config.php')) {
-		require_once("wp-config.php");
-	} else if(file_exists('../../../../wp-config.php')) {
-		require_once("../../../../wp-config.php");
-	} else if(file_exists('../../../../wp-config.php')) {
-		require_once("../../../../wp-config.php");
-	} else {
-		echo '<p>Failed to load bootstrap.</p>';
-		exit;
-	}
+$admin = dirname( __FILE__ ) ;
+$admin = substr( $admin , 0 , strpos( $admin , 'wp-content' ) ) ;
 
-}
+if( file_exists( $admin . 'wp-load.php' ) )
+	require_once( $admin . 'wp-load.php' ) ;
+else
+	require_once( $admin . 'wp-config.php' ) ;
+
 
 require_once(ABSPATH.'wp-admin/admin.php');
 wp_enqueue_script( 'common' );
@@ -599,6 +576,95 @@ wp_enqueue_script( 'jquery-color' );
 						</tbody>
 					</table>
 				</div>
+				<!-- restrict content-->
+				<div class='media-item'>
+					<a class='toggle describe-toggle-on' href='javascript:void(0)'><?php echo $bc_show;?></a>
+					<a class='toggle describe-toggle-off' href='javascript:void(0)'><?php echo $bc_hide;?></a>
+					<div class='filename new'><span class='title'>[bc_restrict_gm]</span></div>
+					<table class='slidetoggle describe startclosed'>
+						<thead class='media-item-info'>
+							<tr valign='top'>
+								<td class='A1B1 bc_desc'><?php _e('Restrict post content to group members', 'bowe-codes');?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<table class="form-bowe-code">
+										<tr>
+											<th><label for="bc_restrict_group_id"><?php _e('Group id or slug', 'bowe-codes');?></label></th>
+											<td><input type="hidden" class="bc_type" name="bc_restrict_gm" value="bc_restrict_gm">
+												<input type="text" id="bc_restrict_group_id" value="" class="bc_large_text"/></td>
+										</tr>
+										<tr>
+											<th><label for="bc_restrict_class"><?php echo $bc_class;?></label></th>
+											<td><input type="text" id="bc_restrict_class" class="bc_large_text" value="my_restrict_message"/></td>
+										</tr>
+										<tr>
+											<td class="action-btn">&nbsp;</td><td class="action-btn"><a href="javascript:void(0)" class="button-secondary insertBC"><?php echo $bc_insert;?></a></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<!--bc_forum-->
+			<div class='media-item'>
+				<a class='toggle describe-toggle-on' href='javascript:void(0)'><?php echo $bc_show;?></a>
+				<a class='toggle describe-toggle-off' href='javascript:void(0)'><?php echo $bc_hide;?></a>
+				<div class='filename new'><span class='title'>[bc_forum]</span></div>
+				<table class='slidetoggle describe startclosed'>
+					<thead class='media-item-info'>
+						<tr valign='top'>
+							<td class='A1B1 bc_desc'><?php _e('Shows latest forum topics or replies.', 'bowe-codes');?></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<table class="form-bowe-code">
+									<tr>
+										<th><label for="bc_forum_group_id"><?php _e('Group id or slug', 'bowe-codes');?></label></th>
+										<td><input type="hidden" class="bc_type" name="bc_forum" value="bc_forum">
+											<input type="text" id="bc_forum_group_id" value="" class="bc_large_text"/></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_amount"><?php echo $bc_amount;?></label></th>
+										<td><input type="text" id="bc_forum_amount" value="5" class="bc_small_text"/></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_avatar"><?php echo $bc_avatar;?></label></th>
+										<td><input type="radio" value="1" name="bc_forum_avatar" checked/><?php echo $bc_yes;?>
+											<input type="radio" value="0" name="bc_forum_avatar"/><?php echo $bc_no;?></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_size"><?php echo $bc_avatar_size;?></label></th>
+										<td><input type="text" id="bc_forum_size" value="50" class="bc_small_text"/></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_type"><?php echo $bc_type;?></label></th>
+										<td><select id="bc_forum_type">
+												<option value="new_forum_topic"><?php _e('Forum topics', 'bowe-codes');?></option>
+												<option value="new_forum_post"><?php _e('Forum replies', 'bowe-codes');?></option>
+											</select></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_class"><?php echo $bc_class;?></label></th>
+										<td><input type="text" id="bc_forum_class" class="bc_large_text" value="my_forum"/></td>
+									</tr>
+									<tr>
+										<th><label for="bc_forum_excerpt"><?php _e('Excerpt (number of words)', 'bowe-codes');?></label></th>
+										<td><input type="text" id="bc_forum_excerpt" value="10" class="bc_small_text"/></td>
+									</tr>
+									<tr>
+										<td class="action-btn">&nbsp;</td><td class="action-btn"><a href="javascript:void(0)" class="button-secondary insertBC"><?php echo $bc_insert;?></a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 	</div>
 		<script type="text/javascript">
@@ -813,6 +879,46 @@ wp_enqueue_script( 'jquery-color' );
 				
 					if(bcode!="") bcode = '['+bcode+']';
 				}
+				
+				/* bc_restrict_gm */
+				if(typebc=="bc_restrict_gm"){
+					
+					if(jQuery('#bc_restrict_group_id').val().length < 1){
+						bcode="";
+						alert('<?php _e('Please type the id or slug of a group', 'bowe-codes');?>');
+					} else {
+						bcode +=' group_id="'+jQuery("#bc_restrict_group_id").val()+'"';
+						
+						if(jQuery("#bc_restrict_class").val()!="my_restrict_message") bcode +=' class="'+jQuery("#bc_restrict_class").val()+'"';
+						
+					}
+					
+					if(bcode!="") bcode = '['+bcode+']<?php _e('The content to hide', 'bowe-codes');?>[/bc_restrict_gm]';
+					
+				}
+				
+				/* bc_forum */
+				if(typebc=="bc_forum"){
+					
+					if(jQuery('#bc_forum_group_id').val().length >= 1)
+						bcode +=' group_id="'+jQuery("#bc_forum_group_id").val()+'"';
+					
+					if(jQuery("#bc_forum_amount").val()!=5) bcode +=' amount="'+jQuery("#bc_forum_amount").val()+'"';
+					if(jQuery("input[type=radio][name=bc_forum_avatar]:checked").attr('value')==0){
+						bcode +=' avatar="0"';
+						avatar = false;
+					}
+					if(jQuery("#bc_forum_size").val()!=50 && avatar) bcode +=' size="'+jQuery("#bc_forum_size").val()+'"';
+					
+					if(jQuery("#bc_forum_type option:selected").val()!="new_forum_topic") bcode +=' type="'+jQuery("#bc_forum_type option:selected").val()+'"';
+					
+					if(jQuery("#bc_forum_class").val()!="my_forum") bcode +=' class="'+jQuery("#bc_forum_class").val()+'"';
+					
+					if(jQuery("#bc_forum_excerpt").val()!=10) bcode +=' excerpt="'+jQuery("#bc_forum_excerpt").val()+'"';
+				
+					if(bcode!="") bcode = '['+bcode+']';
+				}
+				
 				
 				// sending the bcode if everything is ok !
 				if(bcode!=""){
