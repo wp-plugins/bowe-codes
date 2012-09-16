@@ -3,9 +3,9 @@
 Plugin Name: Bowe Codes
 Plugin URI: http://imath.owni.fr/2011/05/15/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
-Version: 1.2
+Version: 1.3
 Requires at least: 3.0
-Tested up to: 3.4
+Tested up to: 3.4.2
 License: GNU/GPL 2
 Author: imath
 Author URI: http://imath.owni.fr/
@@ -16,7 +16,7 @@ Network: true
 define ( 'BOWE_CODES_PLUGIN_NAME', 'bowe-codes' );
 define ( 'BOWE_CODES_PLUGIN_URL', WP_PLUGIN_URL . '/' . BOWE_CODES_PLUGIN_NAME );
 define ( 'BOWE_CODES_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . BOWE_CODES_PLUGIN_NAME );
-define ( 'BOWE_CODES_VERSION', '1.2' );
+define ( 'BOWE_CODES_VERSION', '1.3' );
 
 
 /**
@@ -224,6 +224,12 @@ function bowe_codes_handle_groups_shortcode($atts, $content){
 	return bowe_codes_groups_tag('amount='.$amount.'&avatar='.$avatar.'&size='.$size.'&type='.$type.'&featured='.$featured.'&class='.$class, $content);
 }
 
+add_shortcode('bc_group_users','bowe_codes_handle_group_users_shortcode');
+
+function bowe_codes_handle_group_users_shortcode( $atts, $content ) {
+	extract(shortcode_atts(array('amount'=> 5, 'avatar' => true, 'size' => 50, 'slug' => 0, 'class' => 'group_users'), $atts));
+	return bowe_codes_group_users_tag('amount='.$amount.'&avatar='.$avatar.'&size='.$size.'&slug='.$slug.'&class='.$class, $content);
+}
 
 /**
 * bowe_codes_groups_tag
@@ -291,6 +297,48 @@ function bowe_codes_groups_tag($args='', $title=''){
 	$html_groups_box .='</ul></div>';
 	return $html_groups_box;
 }
+
+function bowe_codes_group_users_tag( $args = '', $title ) {
+	global $wpdb, $bp;
+	$defaults = array(
+		'amount' => 10,
+		'avatar' => true,
+		'size' => 50,
+		'slug' => 0,
+		'class' => 'group_users'
+	);
+ 
+	$r = wp_parse_args( $args, $defaults );
+	extract( $r, EXTR_SKIP );
+	
+	$group_data = bowe_codes_get_group_by_slug( $slug );
+	
+	if( empty( $group_data->id ) )
+		return false;
+	
+	if ( bp_group_has_members( 'exclude_admins_mods=0&group_id='.$group_data->id.'&max='.$amount.'&per_page='.$amount ) ) {
+		
+		$html_members_box .= '<div class="'.$class.'">';
+
+		if( !empty( $title ) ) 
+			$html_members_box .= '<h3>'.$title.'</h3>';
+
+		$html_members_box .= '<ul class="'.$class.'-ul">';
+		
+		while ( bp_group_members() ) {
+		
+			bp_group_the_member();
+			
+			$html_members_box .= bowe_codes_html_member( bp_get_group_member_id(), 'test', $avatar, $size );
+		
+		}
+		
+		$html_members_box .='</ul></div>';
+	}
+	
+	return $html_members_box;
+}
+
 /* enf of groups shorcode functions */
 
 
@@ -511,7 +559,7 @@ function bowe_codes_notifications_tag($args=''){
 	}else{
 		$html_notifications_box .='<ul class="'.$class.'-ul">';
 		$html_notifications_box .= '<li><div class="notification-infos">';
-		$html_notifications_box .= '<p class="bc_notifications">'. __( 'No new notifications.', 'buddypress' ) .'</p>';
+		$html_notifications_box .= '<p class="bc_notifications">'. __( 'No new notifications.', 'bowe-codes' ) .'</p>';
 		$html_notifications_box .= '</div></li>';
 	}
 	$html_notifications_box .='</ul></div>';

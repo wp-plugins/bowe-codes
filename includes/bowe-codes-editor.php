@@ -218,6 +218,55 @@ wp_enqueue_script( 'jquery-color' );
 				<div class='media-item'>
 					<a class='toggle describe-toggle-on' href='javascript:void(0)'><?php echo $bc_show;?></a>
 					<a class='toggle describe-toggle-off' href='javascript:void(0)'><?php echo $bc_hide;?></a>
+					<div class='filename new'><span class='title'>[bc_group_users]</span></div>
+					<table class='slidetoggle describe startclosed'>
+						<thead class='media-item-info'>
+							<tr valign='top'>
+								<td class='A1B1 bc_desc'><?php _e('Displays users for a given group.', 'bowe-codes');?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<table class="form-bowe-code">
+										<tr>
+											<th><label for="bc_group_users_amount"><?php echo $bc_amount;?></label></th>
+											<td><input type="hidden" class="bc_type" name="bc_group_users" value="bc_group_users">
+												<input type="text" id="bc_group_users_amount" value="5" class="bc_small_text"/></td>
+										</tr>
+										<tr>
+											<th><label for="bc_group_users_avatar"><?php echo $bc_avatar;?></label></th>
+											<td><input type="radio" value="1" name="bc_group_users_avatar" checked/><?php echo $bc_yes;?>
+												<input type="radio" value="0" name="bc_group_users_avatar"/><?php echo $bc_no;?></td>
+										</tr>
+										<tr>
+											<th><label for="bc_group_users_size"><?php echo $bc_avatar_size;?></label></th>
+											<td><input type="text" id="bc_group_users_size" value="50" class="bc_small_text"/></td>
+										</tr>
+										<tr>
+											<th><label for="bc_group_users_slug"><?php _e('Group slug', 'bowe-codes');?></label></th>
+											<td><input type="text" id="bc_group_users_slug" class="bc_large_text"/></td>
+										</tr>
+										<tr>
+											<th><label for="bc_group_users_class"><?php echo $bc_class;?></label></th>
+											<td><input type="text" id="bc_group_users_class" class="bc_large_text" value="group_users"/></td>
+										</tr>
+										<tr>
+											<th><label for="bc_group_users_content"><?php _e('Custom title/content', 'bowe-codes');?></label></th>
+											<td><input type="text" id="bc_group_users_content" class="bc_large_text"/></td>
+										</tr>
+										<tr>
+											<td class="action-btn">&nbsp;</td><td class="action-btn"><a href="javascript:void(0)" class="button-secondary insertBC"><?php echo $bc_insert;?></a></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class='media-item'>
+					<a class='toggle describe-toggle-on' href='javascript:void(0)'><?php echo $bc_show;?></a>
+					<a class='toggle describe-toggle-off' href='javascript:void(0)'><?php echo $bc_hide;?></a>
 					<div class='filename new'><span class='title'>[bc_members]</span></div>
 					<table class='slidetoggle describe startclosed'>
 						<thead class='media-item-info'>
@@ -744,6 +793,32 @@ wp_enqueue_script( 'jquery-color' );
 					if(jQuery("#bc_groups_class").val()!="my_groups") bcode +=' class="'+jQuery("#bc_groups_class").val()+'"';
 						
 					if(jQuery("#bc_groups_content").val()!="") content = jQuery("#bc_groups_content").val()+'[/bc_groups]';
+				
+					if(bcode!="") bcode = '['+bcode+']';
+					if(content!="") bcode = bcode + content;
+				}
+				
+				/* bc_group_users */
+				if(typebc=="bc_group_users"){
+					
+					if( jQuery("#bc_group_users_slug").val().length < 3 ) {
+						alert("<?php _e('Please add the slug of a group', 'bowe-codes');?>");
+						return false;
+					}
+					
+					var content="";
+					if(jQuery("#bc_group_users_amount").val()!=10) bcode +=' amount="'+jQuery("#bc_group_users_amount").val()+'"';
+					if(jQuery("input[type=radio][name=bc_group_users_avatar]:checked").attr('value')==0){
+						bcode +=' avatar="0"';
+						avatar = false;
+					}
+					if(jQuery("#bc_group_users_size").val()!=50 && avatar) bcode +=' size="'+jQuery("#bc_group_users_size").val()+'"';
+					
+					if(jQuery("#bc_group_users_slug").val() !="") bcode += ' slug="'+jQuery("#bc_group_users_slug").val()+'"';
+					
+					if(jQuery("#bc_group_users_class").val()!="group_users") bcode +=' class="'+jQuery("#bc_group_users_class").val()+'"';
+						
+					if(jQuery("#bc_group_users_content").val()!="") content = jQuery("#bc_group_users_content").val()+'[/bc_group_users]';
 				
 					if(bcode!="") bcode = '['+bcode+']';
 					if(content!="") bcode = bcode + content;
