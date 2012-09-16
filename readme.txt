@@ -4,8 +4,8 @@ Donate link: http://imath.owni.fr/
 Tags: BuddyPress, shortcode, post, template, widget
 Requires at least: 3.0
 License: GNU/GPL 2
-Tested up to: 3.4
-Stable tag: 1.2
+Tested up to: 3.4.2
+Stable tag: 1.3
 
 Allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using shortcodes.
 
@@ -39,10 +39,13 @@ Please add a comment <a href="http://imath.owni.fr/2011/05/15/bowe-codes/">here<
 
 == Changelog ==
 
+= 1.3 =
+* 1 new shortcode : displays group members of a given group
+
 = 1.2 =
 * group link bug fix for certain config (see the forum of this plugin)
 * 2 new shortcodes : 1 to hide post content, and 1 other to display recent forum entries
-* tested in BuddyPress 1.6beta1
+* tested in BuddyPress 1.6
 
 = 1.1 =
 * css changes by bowromir
@@ -53,6 +56,9 @@ Please add a comment <a href="http://imath.owni.fr/2011/05/15/bowe-codes/">here<
 * BP content shortcodes
 
 == Upgrade Notice ==
+
+= 1.3 =
+nothing particular..
 
 = 1.2 =
 nothing particular..
