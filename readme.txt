@@ -1,6 +1,6 @@
 === Bowe Codes ===
 Contributors: imath, bowromir
-Donate link: http://imath.owni.fr/
+Donate link: http://imathi.eu/donations/
 Tags: BuddyPress, shortcode, post, template, widget
 Requires at least: 3.0
 License: GNU/GPL 2
@@ -28,7 +28,7 @@ Activate Bowe Codes in the "Plugins" admin panel using the "Network Activate" (o
 
 = If you have a question =
 
-Please add a comment <a href="http://imath.owni.fr/2011/05/15/bowe-codes/">here</a>
+Please add a comment <a href="http://imathi.eu/2011/05/15/bowe-codes/">here</a>
 
 == Screenshots ==
 

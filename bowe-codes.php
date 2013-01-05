@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: Bowe Codes
-Plugin URI: http://imath.owni.fr/2011/05/15/bowe-codes/
+Plugin URI: http://imathi.eu/2011/05/15/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
 Version: 1.3
 Requires at least: 3.0
 Tested up to: 3.4.2
 License: GNU/GPL 2
 Author: imath
-Author URI: http://imath.owni.fr/
+Author URI: http://imathi.eu/
 Network: true
 */
 
