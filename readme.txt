@@ -2,21 +2,27 @@
 Contributors: imath, bowromir
 Donate link: http://imathi.eu/donations/
 Tags: BuddyPress, shortcode, post, template, widget
-Requires at least: 3.0
+Requires at least: 3.5
 License: GNU/GPL 2
-Tested up to: 3.4.2
-Stable tag: 1.3
+Tested up to: 3.6
+Stable tag: 2.0
 
 Allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using shortcodes.
 
 == Description ==
 
 The name of the plugin could have been <i>BuddyPress Shortcodes</i>, but as it's Bowe's idea, i named it <b>Bowe Codes</b>. This plugin needs <a href="buddypress.org">BuddyPress</a> and it 
-allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using the WordPress shortcodes API. There are 10 shortcodes availble in order
+allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using the WordPress shortcodes API. There are 12 shortcodes available in order
 to display a specific member, a group, a list of members, the friends of the displayed or loggedin user, the groups of the displayed or loggedin user,
 the messages and the notifications of a loggedin user, blogs of the network, posts from the blogs of the network.
-Above WordPress Editor, a button will help you to configure your shortcodes. 
-In BuddyPress admin menu, you will find the BCodes Options sub menu where you can disable the default css file to custom your own styles.
+
+http://vimeo.com/65513546
+
+Into the toolbar of your WordPress rich text editor or into the quicktags bar of the regular text editor, a button will help you to configure your shortcodes. 
+
+In the Settings menu of your backend, you will find the Bowe Codes Settings sub menu where you can disable the default css file to custom your own styles.
+
+This plugin is available in french and english.
 
 == Installation ==
 
@@ -28,16 +34,21 @@ Activate Bowe Codes in the "Plugins" admin panel using the "Network Activate" (o
 
 = If you have a question =
 
-Please add a comment <a href="http://imathi.eu/2011/05/15/bowe-codes/">here</a>
+Please add a comment <a href="http://imathi.eu/tag/bowe-codes/">here</a>
 
 == Screenshots ==
 
-1. Examples for bc_member, bc_group and bc_groups.
-2. Examples for bc_members, bc_posts and bc_messages.
-3. Button to add and configure shortcode.
-4. Admin panel.
+1. Button into WordPress editors toolbars.
+2. The Shortcode editor.
+3. Examples of shorcodes.
 
 == Changelog ==
+
+= 2.0 =
+* new shortcode editor
+* new shortcode bc_activity
+* a lot of filters customize the behavior of the plugin
+* requires BuddyPress 1.7
 
 = 1.3 =
 * 1 new shortcode : displays group members of a given group
@@ -56,6 +67,9 @@ Please add a comment <a href="http://imathi.eu/2011/05/15/bowe-codes/">here</a>
 * BP content shortcodes
 
 == Upgrade Notice ==
+
+= 2.0 =
+* requires BuddyPress 1.7
 
 = 1.3 =
 nothing particular..
