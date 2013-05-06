@@ -5,7 +5,7 @@ Tags: BuddyPress, shortcode, post, template, widget
 Requires at least: 3.5
 License: GNU/GPL 2
 Tested up to: 3.6
-Stable tag: 2.0
+Stable tag: 2.0.1
 
 Allows users to simply insert BuddyPress specific data into posts, widgets or theme files by using shortcodes.
 
@@ -19,10 +19,10 @@ the messages and the notifications of a loggedin user, blogs of the network, pos
 http://vimeo.com/65513546
 
 Into the toolbar of your WordPress rich text editor or into the quicktags bar of the regular text editor, a button will help you to configure your shortcodes. 
-
 In the Settings menu of your backend, you will find the Bowe Codes Settings sub menu where you can disable the default css file to custom your own styles.
-
 This plugin is available in french and english.
+
+<strong>NB : Since version 2.0, this plugin requires at least BuddyPress 1.7</strong>
 
 == Installation ==
 
@@ -43,6 +43,10 @@ Please add a comment <a href="http://imathi.eu/tag/bowe-codes/">here</a>
 3. Examples of shorcodes.
 
 == Changelog ==
+
+= 2.0.1 =
+* fixes a bug by checking activity component is active when building the shortcode settings
+* adds an early check of BuddyPress version neutralizing the plugin if version < 1.7
 
 = 2.0 =
 * new shortcode editor
@@ -67,6 +71,10 @@ Please add a comment <a href="http://imathi.eu/tag/bowe-codes/">here</a>
 * BP content shortcodes
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+* requires at least BuddyPress 1.7
+* if BuddyPress version 1.7 is not active on the blog, the plugin will prompt you to roll back to Bowe Codes previous version (1.3).
 
 = 2.0 =
 * requires BuddyPress 1.7
