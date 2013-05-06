@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Bowe Codes package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Bowe Codes 2.0\n"
+"Project-Id-Version: Bowe Codes 2.0.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/bowe-codes\n"
-"POT-Creation-Date: 2013-05-05 20:08:28+00:00\n"
+"POT-Creation-Date: 2013-05-06 16:30:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
