@@ -3,7 +3,7 @@
 Plugin Name: Bowe Codes
 Plugin URI: http://imathi.eu/tag/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
-Version: 2.0
+Version: 2.0.1
 Requires at least: 3.5.1
 Tested up to: 3.6
 License: GNU/GPL 2
@@ -53,9 +53,9 @@ final class BoweStrap {
 
 	private function __construct() { /* Do nothing here */ }
 
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.0' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.0.1' ); }
 
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.0' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.0.1' ); }
 
 	public function __isset( $key ) { return isset( $this->data[$key] ); }
 
@@ -79,7 +79,7 @@ final class BoweStrap {
 
 		/** Version **********************************************************/
 
-		$this->version    = '2.0';
+		$this->version    = '2.0.1';
 
 		/** Paths *************************************************************/
 
@@ -222,6 +222,7 @@ final class BoweStrap {
  * First checks for multsite config and super admin settings
  *
  * @global int blog_id the current blog id
+ * @uses plugin_dir_path() to build the path to the plugin
  * @uses is_multisite() to check for multisite config
  * @uses bp_get_root_blog_id() to get the root blog id where BuddyPress is running
  * @uses bp_get_option() to get the super admin setting
@@ -229,6 +230,11 @@ final class BoweStrap {
  */
 function bowecodes() {
 	global $blog_id;
+
+	if( !defined( 'BP_VERSION' ) || version_compare( BP_VERSION, '1.7', '<' ) ) {
+		require( plugin_dir_path( __FILE__ ) . 'includes/1.3.php'  );
+		return false;
+	}
 	
 	if( is_multisite() && $blog_id != bp_get_root_blog_id() && bp_get_option( 'bc_enable_network', 'yes' ) != 'yes' )
 		return false;

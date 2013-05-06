@@ -89,7 +89,7 @@ class Bowe_Codes_Shortcodes {
 	 * It's a bit boaring but saves time for the Bowe Codes editor ;)
 	 *
 	 * @uses bp_is_active() to check for active BuddyPress component before registering a shortcode
-	 * @uses bp_activity_get_types() to get all the available BuddyPress activity actions
+	 * @uses bowe_codes_activity_list_types() to get all the available BuddyPress activity actions
 	 * @uses is_multisite() to check for the network config
 	 * @return the settings for the available shortcodes
 	 */
@@ -247,7 +247,7 @@ class Bowe_Codes_Shortcodes {
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 5, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'activity_update', 'required' => false, 'caption' => __( 'Activity type', 'bowe-codes' ), 'choices' => bp_activity_get_types() ),
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'activity_update', 'required' => false, 'caption' => __( 'Activity type', 'bowe-codes' ), 'choices' => bowe_codes_activity_list_types() ),
 					array( 'id' => 'class', 'type' => 'string', 'default' => 'my_activity', 'required' => false, 'caption' => __( 'Css Class', 'bowe-codes' ) )
 				),
 				'description' => __( 'Shows the latest activities for a given type', 'bowe-codes' )

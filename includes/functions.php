@@ -975,6 +975,23 @@ function bowe_codes_blogs_tag( $args = '' ){
 /** Activities ******************************************************/
 
 /**
+ * Gets the activity types after checking 1.7 function exists
+ * 
+ * @since  2.0.1
+ * 
+ * @uses bp_is_active to check for activity component
+ * @uses bp_activity_get_types() to return the available activity types.
+ * @return array the list of activities or warning message
+ */
+function bowe_codes_activity_list_types() {
+
+	if( bp_is_active( 'activity' ) && function_exists( 'bp_activity_get_types' ) )
+		return bp_activity_get_types();
+	else
+		return array( 'activity_update' => 'BuddyPress 1.7 is required' );
+}
+
+/**
  * Handling function for the bc_activity shortcode 
  * 
  * @param  array $args the shortcode arguments
