@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Bowe Codes package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Bowe Codes 2.0.1\n"
+"Project-Id-Version: Bowe Codes 2.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/bowe-codes\n"
-"POT-Creation-Date: 2013-05-06 16:30:49+00:00\n"
+"POT-Creation-Date: 2013-06-30 16:37:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,12 +17,12 @@ msgid "Cheatin&#8217; huh?"
 msgstr ""
 
 #: includes/admin-functions.php:36 includes/admin-functions.php:172
-#: includes/admin-functions.php:200
+#: includes/admin-functions.php:200 includes/widget.php:176
 msgid "Yes"
 msgstr ""
 
 #: includes/admin-functions.php:37 includes/admin-functions.php:173
-#: includes/admin-functions.php:202
+#: includes/admin-functions.php:202 includes/widget.php:177
 msgid "No"
 msgstr ""
 
@@ -30,8 +30,8 @@ msgstr ""
 msgid "Choose the shortcode you want to use"
 msgstr ""
 
-#: includes/admin-functions.php:152 includes/admin.php:268
-#: includes/admin.php:269
+#: includes/admin-functions.php:152 includes/admin.php:269
+#: includes/admin.php:270
 msgid "Bowe Codes Settings"
 msgstr ""
 
@@ -51,39 +51,39 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: includes/admin.php:95 includes/admin.php:96 includes/admin.php:117
+#: includes/admin.php:96 includes/admin.php:97 includes/admin.php:118
 msgid "Bowe Codes Editor"
 msgstr ""
 
-#: includes/admin.php:124
+#: includes/admin.php:125
 msgid "Insert Shortcode"
 msgstr ""
 
-#: includes/admin.php:124
+#: includes/admin.php:125
 msgid "Cancel"
 msgstr ""
 
-#: includes/admin.php:178
+#: includes/admin.php:179
 msgid "Please select a shorcode in the list"
 msgstr ""
 
-#: includes/admin.php:179
+#: includes/admin.php:180
 msgid "is a required field"
 msgstr ""
 
-#: includes/admin.php:181
+#: includes/admin.php:182 includes/admin.php:309
 msgid "Building the form, please wait..."
 msgstr ""
 
-#: includes/admin.php:182
+#: includes/admin.php:183
 msgid "Put your restricted content here"
 msgstr ""
 
-#: includes/admin.php:205
+#: includes/admin.php:206
 msgid "Build Your Bowe Code"
 msgstr ""
 
-#: includes/admin.php:292
+#: includes/admin.php:293
 msgid "Allow child blogs to use Bowe Codes"
 msgstr ""
 
@@ -287,6 +287,35 @@ msgstr ""
 
 #: includes/shortcodes.php:258
 msgid "xProfile field Name (separated by a comma if more than one)"
+msgstr ""
+
+#: includes/widget.php:22
+msgid "Build widgets with Bowe Codes"
+msgstr ""
+
+#: includes/widget.php:23
+msgctxt "widget name"
+msgid "(Bowe Codes) Widget"
+msgstr ""
+
+#: includes/widget.php:48
+msgid "Bowe Codes widget"
+msgstr ""
+
+#: includes/widget.php:115
+msgid "Title:"
+msgstr ""
+
+#: includes/widget.php:116
+msgid "Shortcode"
+msgstr ""
+
+#: includes/widget.php:118
+msgid "Choose shortcode"
+msgstr ""
+
+#: includes/widget.php:200
+msgid "* required"
 msgstr ""
 #. Plugin Name of the plugin/theme
 msgid "Bowe Codes"
