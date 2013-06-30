@@ -54,6 +54,7 @@ class Bowe_Codes_Admin {
 		add_action( 'admin_head',                array( $this, 'admin_head'           )     );
 		add_action( 'admin_footer-post-new.php', array( $this, 'print_footer_scripts' )     );
 		add_action( 'admin_footer-post.php',     array( $this, 'print_footer_scripts' )     );
+		add_action( 'load-widgets.php',          array( $this, 'widgets_script'       ), 10 );
 
 		// Now let's add a regular settings page to eventually play with css.
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 14 );
@@ -292,6 +293,27 @@ class Bowe_Codes_Admin {
 		add_settings_field( 'bc_enable_network', __( 'Allow child blogs to use Bowe Codes',   'bowe-codes' ), 'bp_admin_setting_callback_bowe_codes',   'buddypress', 'bp_main' );
 		register_setting( 'buddypress', 'bc_enable_network',   'sanitize_text_field' );
 	}
+	
+	/**
+	 * Enqueues a little javascript in the widget admin for Bowe Codes Widget
+	 *
+	 * @uses bowe_codes_get_plugin_url() to get plugin's url
+	 * @uses bowe_codes_get_version() to get plugin's version
+	 * @uses wp_enqueue_script() to add our script to the WP enqueued scripts
+	 * @uses wp_localize_script() to internationalize our messages
+	 */
+	public function widgets_script() {
+		wp_enqueue_script( 'bowe-codes-widget-js', bowe_codes_get_plugin_url() .'js/bowe-codes-widget.js', array( 'jquery' ), bowe_codes_get_version() );
+		wp_localize_script( 'bowe-codes-widget-js', 'bowe_codes_widgets', array(
+				'loader'         => bowe_codes_get_plugin_url() .'images/loading.gif',
+				'loadertxt'      => __( 'Building the form, please wait...', 'bowe-codes' )
+			)
+		);
+		
+		// if plugins needs to load their scripts.
+		do_action( 'bowe_codes_widget_enqueue_scripts' );
+	}
+	
 }
 
 endif;
