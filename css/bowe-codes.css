@@ -106,8 +106,8 @@
     margin: 0 0 0 45px;
 }
 
-.my_members .featured .my_members-ul li,
-.my_groups .featured .my_groups-ul li,
+.my_members li.featured,
+.my_groups li.featured,
 .my_blogs .featured .my_blogs-ul li {
     background-color:#FFFCCF;
 }

@@ -3,9 +3,9 @@
 Plugin Name: Bowe Codes
 Plugin URI: http://imathi.eu/tag/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
-Version: 2.1
+Version: 2.5-beta1
 Requires at least: 3.5.1
-Tested up to: 3.6
+Tested up to: 3.6.1
 License: GNU/GPL 2
 Author: imath
 Author URI: http://imathi.eu/
@@ -53,9 +53,9 @@ final class BoweStrap {
 
 	private function __construct() { /* Do nothing here */ }
 
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.1' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta1' ); }
 
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.1' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta1' ); }
 
 	public function __isset( $key ) { return isset( $this->data[$key] ); }
 
@@ -79,7 +79,7 @@ final class BoweStrap {
 
 		/** Version **********************************************************/
 
-		$this->version    = '2.1';
+		$this->version    = '2.5-beta1';
 
 		/** Paths *************************************************************/
 
@@ -112,6 +112,7 @@ final class BoweStrap {
 		require( $this->includes_dir . 'functions.php'  );
 		require( $this->includes_dir . 'actions.php'    );
 		require( $this->includes_dir . 'shortcodes.php' );
+		require( $this->includes_dir . 'template-tags.php' );
 		require( $this->includes_dir . 'widget.php' );
 
 		if( is_admin() )
@@ -125,8 +126,8 @@ final class BoweStrap {
 	 */
 	private function setup_actions() {
 		// some actions..
-		add_action( 'bowe_codes_register_shortcodes', array( $this, 'register_shortcodes' ),   10 );
-		add_action( 'bowe_codes_enqueue_scripts',     array( $this, 'enqueue_scripts' ), 10 );
+		add_action( 'bowe_codes_register_shortcodes', array( $this, 'register_shortcodes' ), 10 );
+		add_action( 'bowe_codes_enqueue_scripts',     array( $this, 'enqueue_scripts' ),     10 );
 
 		if( is_admin() )
 			add_action( 'bp_loaded', array( $this, 'load_admin' ), 10 );
