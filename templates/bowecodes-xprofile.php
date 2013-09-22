@@ -15,7 +15,11 @@
 		<?php while ( bp_profile_fields() ) : bp_the_profile_field(); ?>
 					
 			<p>
-				<span class="xprofile_thead"><?php bp_the_profile_field_name();?></span>
+				
+				<?php if( bowe_codes_member_loop_show_xprofile_label() ):?>
+					<span class="xprofile_thead"><?php bp_the_profile_field_name();?></span>
+				<?php endif;?>
+
 				<span class="xprofile_content"><?php bp_the_profile_field_value();?></span>
 			</p>
 

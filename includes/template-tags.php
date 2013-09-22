@@ -135,6 +135,7 @@ function bowe_codes_member_loop_avatar() {
  * @since  2.5
  * 
  * @global BP_Core_Members_Template $members_template
+ * @uses bp_is_active() to check for xprofile component
  * @return mixed comma separated list of profile fields or false
  */
 function bowe_codes_member_loop_show_xprofile() {
@@ -199,6 +200,26 @@ function bowe_codes_member_loop_xprofile_args() {
 	$user_xprofile =  bowe_codes_include_fields( $parse_fields );
 
 	return array( 'user_id' => bp_get_member_user_id(), 'exclude_fields' => $user_xprofile );
+}
+
+/**
+ * Should we display label for xprofile fields ?
+ *
+ * @since  2.5
+ *
+ * @global BP_Core_Members_Template $members_template
+ * @uses bp_is_active() to check for xprofile component
+ * @return boolean true|false
+ */
+function bowe_codes_member_loop_show_xprofile_label() {
+	global $members_template;
+
+	if( empty( $members_template->bowe_codes ) )
+		return false;
+
+	$show_xprofile_label = !empty( $members_template->bowe_codes->show_labels ) && bp_is_active( 'xprofile' ) ? $members_template->bowe_codes->show_labels : false;
+
+	return $show_xprofile_label;
 }
 
 /* Specific to bc_group_users */

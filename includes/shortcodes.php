@@ -256,6 +256,7 @@ class Bowe_Codes_Shortcodes {
 
 		if( bp_is_active( 'xprofile' ) ) {
 			$all_shortcodes_settings['bc_member']['attributes'][] = array( 'id' => 'fields', 'type' => 'string', 'default' => '', 'required' => false, 'caption' => __( 'xProfile field Name (separated by a comma if more than one)', 'bowe-codes' ) );
+			$all_shortcodes_settings['bc_member']['attributes'][] = array( 'id' => 'show_labels', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Show labels of xProfile fields', 'bowe-codes' ) );
 			$all_shortcodes_settings['bc_members']['attributes'][3]['choices']['alphabetical'] = __( 'Alphabetical', 'bowe-codes' );
 			$all_shortcodes_settings['bc_friends']['attributes'][3]['choices']['alphabetical'] = __( 'Alphabetical', 'bowe-codes' );
 		}
@@ -298,6 +299,9 @@ class Bowe_Codes_Shortcodes {
 
 		$bc_member = shortcode_atts( $this->default_attributes( 'bc_member' ), $atts );
 
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_member['bowecodes_id'] = 'bc_member';
+
 		// Return content
 		return bowe_codes_member_tag( $bc_member );
 	}
@@ -305,6 +309,9 @@ class Bowe_Codes_Shortcodes {
 	public function display_members( $atts = '') {
 
 		$bc_members = shortcode_atts( $this->default_attributes( 'bc_members' ), $atts );
+
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_members['bowecodes_id'] = 'bc_members';
 
 		// Return contents of output buffer
 		return bowe_codes_members_tag( $bc_members );
@@ -326,6 +333,9 @@ class Bowe_Codes_Shortcodes {
 
 		$bc_friends = shortcode_atts( $this->default_attributes( 'bc_friends' ), $atts );
 
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_friends['bowecodes_id'] = 'bc_friends';
+
 		// Return contents of output buffer
 		return bowe_codes_members_tag( $bc_friends );
 	}
@@ -335,6 +345,9 @@ class Bowe_Codes_Shortcodes {
 	public function display_group( $atts = '' ) {
 
 		$bc_group = shortcode_atts( $this->default_attributes( 'bc_group' ), $atts );
+
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_group['bowecodes_id'] = 'bc_group';
 
 		// Return contents of output buffer
 		return bowe_codes_group_tag( $bc_group );
@@ -347,6 +360,9 @@ class Bowe_Codes_Shortcodes {
 		if( !empty( $content ) )
 			$bc_groups['content'] = $content;
 
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_groups['bowecodes_id'] = 'bc_groups';
+
 		// Return contents of output buffer
 		return bowe_codes_groups_tag( $bc_groups );
 	}
@@ -358,6 +374,9 @@ class Bowe_Codes_Shortcodes {
 		if( !empty( $content ) )
 			$bc_group_users['content'] = $content;
 
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_group_users['bowecodes_id'] = 'bc_group_users';
+
 		// Return contents of output buffer
 		return bowe_codes_group_users_tag( $bc_group_users );
 	}
@@ -365,6 +384,9 @@ class Bowe_Codes_Shortcodes {
 	public function display_user_groups( $atts = '' ) {
 
 		$bc_user_groups = shortcode_atts( $this->default_attributes( 'bc_user_groups' ), $atts );
+
+		// one day someone will ask to have different templates for same shortcode..
+		$bc_user_groups['bowecodes_id'] = 'bc_user_groups';
 
 		// Return contents of output buffer
 		return bowe_codes_groups_tag( $bc_user_groups );

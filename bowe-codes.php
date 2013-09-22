@@ -3,7 +3,7 @@
 Plugin Name: Bowe Codes
 Plugin URI: http://imathi.eu/tag/bowe-codes/
 Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
-Version: 2.5-beta1
+Version: 2.5-beta2
 Requires at least: 3.5.1
 Tested up to: 3.6.1
 License: GNU/GPL 2
@@ -53,9 +53,9 @@ final class BoweStrap {
 
 	private function __construct() { /* Do nothing here */ }
 
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta1' ); }
+	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta2' ); }
 
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta1' ); }
+	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'bowe-codes' ), '2.5-beta2' ); }
 
 	public function __isset( $key ) { return isset( $this->data[$key] ); }
 
@@ -79,7 +79,7 @@ final class BoweStrap {
 
 		/** Version **********************************************************/
 
-		$this->version    = '2.5-beta1';
+		$this->version    = '2.5-beta2';
 
 		/** Paths *************************************************************/
 

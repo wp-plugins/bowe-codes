@@ -46,9 +46,9 @@
 						<span class="group-desc"><?php bp_group_description();?></span>
 					</p>
 
-					<?php do_action( 'bowe_codes_group_loop_after_description', bowe_codes_group_loop_backpat( 'bowe_codes_group_loop_after_description' ) );?>
-
 				<?php endif;?>
+
+				<?php do_action( 'bowe_codes_group_loop_after_description', bowe_codes_group_loop_backpat( 'bowe_codes_group_loop_after_description' ) );?>
 
 			</div>
 

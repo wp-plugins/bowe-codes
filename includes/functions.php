@@ -244,6 +244,12 @@ function bowe_codes_member_tag( $args = '' ) {
 	if( empty( $class ) )
 		$class = 'my_member';
 
+	if( empty( $bowecodes_id ) )
+		$bowecodes_id = 'bc_member';
+
+	// for plugins and themes if they need to use different template parts for this shortcode
+	$template_part = apply_filters( 'bowe_codes_member_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $bowecodes_id, $args );
+
 	if( bp_has_members( array( 'include' => $user_id ) ) ) {
 		//attaching bowe codes settings in members_template
 		$members_template->bowe_codes = new stdClass();
@@ -251,9 +257,13 @@ function bowe_codes_member_tag( $args = '' ) {
 		$members_template->bowe_codes->avatar = $avatar;
 		$members_template->bowe_codes->size = $size;
 		$members_template->bowe_codes->fields = $fields;
-		$members_template->bowe_codes->backpat = array( 'bc' => 'bc_member' ); 
+		$members_template->bowe_codes->show_labels = $show_labels;
+		$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
 
-		$html_member_box = bowe_codes_buffer_template_part( 'bowecodes', 'members' );
+		// adding a filter here so that plugins/themes can attach more datas to members_template
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_member_global', $members_template->bowe_codes, $bowecodes_id, $args );
+
+		$html_member_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring members template from cached one
@@ -314,6 +324,12 @@ function bowe_codes_members_tag( $args = '' ){
 	$html_members_box = false;
  
 	extract( $args, EXTR_SKIP );
+
+	if( empty( $bowecodes_id ) )
+		$bowecodes_id = 'bc_members';
+
+	// for plugins and themes if they need to use different template parts for this shortcode
+	$template_part = apply_filters( 'bowe_codes_members_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $bowecodes_id, $args );
 	
 	$exclude_members_from_loop = $featured_members = array();
 	
@@ -340,9 +356,12 @@ function bowe_codes_members_tag( $args = '' ){
 					$members_template->bowe_codes->class = $class;
 					$members_template->bowe_codes->avatar = $avatar;
 					$members_template->bowe_codes->size = $size;
-					$members_template->bowe_codes->backpat = array( 'bc' => 'bc_members' );
+					$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+
+					// adding a filter here so that plugins/themes can attach more datas to members_template
+					$members_template->bowe_codes = apply_filters( 'bowe_codes_members_featured_global', $members_template->bowe_codes, $bowecodes_id, $args );
 					
-					$html_members_box = bowe_codes_buffer_template_part( 'bowecodes', 'members' );
+					$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
 					//restoring members template from cached one
 					$members_template = $cached_members_template;
@@ -381,7 +400,10 @@ function bowe_codes_members_tag( $args = '' ){
 		if( !empty( $user_id ) )
 			$members_template->bowe_codes->backpat = array( 'bc' => 'bc_friends' );
 		else
-			$members_template->bowe_codes->backpat = array( 'bc' => 'bc_members' );
+			$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+
+		// adding a filter here so that plugins/themes can attach more datas to members_template
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_members_global', $members_template->bowe_codes, $bowecodes_id, $args, $members_arg );
 
 		//we need to eventually merge with featured members !
 		$members_template->members = array_merge( $featured_members, $members_template->members );
@@ -390,7 +412,7 @@ function bowe_codes_members_tag( $args = '' ){
 		$members_template->member_count = count( $members_template->members );
 		$members_template->total_member_count += count( $featured_members );
 
-		$html_members_box = bowe_codes_buffer_template_part( 'bowecodes', 'members' );
+		$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring members template from cached one
@@ -518,9 +540,16 @@ function bowe_codes_html_group( $id, $name, $slug, $size="50", $avatar = false, 
  */
 function bowe_codes_group_tag( $args = '' ){
 	global $groups_template;
+	$bp = buddypress();
 
 	// caching groups template
 	$cached_groups_template = $groups_template;
+
+	// on single group we need to temporarly empty the $bp->groups->current_group->slug
+	if( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
+		$cached_current_group = $bp->groups->current_group->slug;
+		$bp->groups->current_group->slug = '';
+	}
 
 	if( !is_array( $args ) )
 		return false;
@@ -535,6 +564,12 @@ function bowe_codes_group_tag( $args = '' ){
 	if( empty( $class ) )
 		$class = 'my_group';
 
+	if( empty( $bowecodes_id ) )
+		$bowecodes_id = 'bc_group';
+
+	// for plugins and themes if they need to use different template parts for this shortcode
+	$template_part = apply_filters( 'bowe_codes_group_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $bowecodes_id, $args );
+
 	$html_group_box = '';
 
 	if( bp_has_groups( array( 'include' => $bc_group_id ) ) ) {
@@ -544,13 +579,19 @@ function bowe_codes_group_tag( $args = '' ){
 		$groups_template->bowe_codes->avatar = $avatar;
 		$groups_template->bowe_codes->size = $size;
 		$groups_template->bowe_codes->group_description = $desc;
-		$groups_template->bowe_codes->backpat = array( 'bc' => 'bc_group' ); 
+		$groups_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
 
-		$html_group_box = bowe_codes_buffer_template_part( 'bowecodes', 'groups' );
+		// adding a filter here so that plugins/themes can attach more datas to groups_template
+		$groups_template->bowe_codes = apply_filters( 'bowe_codes_group_global', $groups_template->bowe_codes, $bowecodes_id, $args );
+
+		$html_group_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 	
 	//restoring groups template from cached one
 	$groups_template = $cached_groups_template;
+	//restoring current group from cached one
+	if( !empty( $cached_current_group ) )
+		$bp->groups->current_group->slug = $cached_current_group;
 	
 	return $html_group_box;
 }
@@ -602,14 +643,28 @@ function bowe_codes_get_groups_by_slug( $slug_list ) {
  */
 function bowe_codes_groups_tag( $args = '' ){
 	global $groups_template;
+	$bp = buddypress();
 
 	// caching groups template
 	$cached_groups_template = $groups_template;
+
+	// on single group we need to temporarly empty the $bp->groups->current_group->slug
+	if( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
+		$cached_current_group = $bp->groups->current_group->slug;
+		$bp->groups->current_group->slug = '';
+	}
 
 	if( !is_array( $args ) )
 		return false;
  
 	extract( $args, EXTR_SKIP );
+
+	if( empty( $bowecodes_id ) )
+		$bowecodes_id = 'bc_groups';
+
+	// for plugins and themes if they need to use different template parts for this shortcode
+	$template_part = apply_filters( 'bowe_codes_groups_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $bowecodes_id, $args );
+
  
 	$html_groups_box = '';
 	$exclude_groups_from_loop = $featured_groups = array();
@@ -624,7 +679,6 @@ function bowe_codes_groups_tag( $args = '' ){
 			$featured_arg = apply_filters( 'bowe_codes_groups_tag_featured_args', array( 'include' => $exclude_groups_from_loop, 'max' => $amount ), $args );
 
 			if( bp_has_groups( $featured_arg ) ){
-
 				//attaching bowe codes settings in groups_template
 				$groups_template->bowe_codes = new stdClass();
 				
@@ -639,8 +693,13 @@ function bowe_codes_groups_tag( $args = '' ){
 					$groups_template->bowe_codes->avatar = $avatar;
 					$groups_template->bowe_codes->size = $size;
 					$groups_template->bowe_codes->content = !empty( $content ) ? $content : false;
+
+
+					// adding a filter here so that plugins/themes can attach more datas to groups_template
+					$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $bowecodes_id, $args );
+
 					
-					$html_groups_box = bowe_codes_buffer_template_part( 'bowecodes', 'groups' );
+					$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
 					//restoring groups template from cached one
 					$groups_template = $cached_groups_template;
@@ -687,7 +746,10 @@ function bowe_codes_groups_tag( $args = '' ){
 			$groups_template->bowe_codes->backpat = array( 'bc' => 'bc_user_groups' );
 
 		else
-			$groups_template->bowe_codes->backpat = array( 'bc' => 'bc_groups' );
+			$groups_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+
+		// adding a filter here so that plugins/themes can attach more datas to groups_template
+		$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_global', $groups_template->bowe_codes, $bowecodes_id, $args );
 
 		//we need to eventually merge with featured groups !
 		$groups_template->groups = array_merge( $featured_groups, $groups_template->groups );
@@ -696,11 +758,15 @@ function bowe_codes_groups_tag( $args = '' ){
 		$groups_template->group_count = count( $groups_template->groups );
 		$groups_template->total_group_count += count( $featured_groups );
 
-		$html_groups_box = bowe_codes_buffer_template_part( 'bowecodes', 'groups' );
+		$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring groups template from cached one
 	$groups_template = $cached_groups_template;
+
+	//restoring current group from cached one
+	if( !empty( $cached_current_group ) )
+		$bp->groups->current_group->slug = $cached_current_group;
 
 	return $html_groups_box;
 }
@@ -732,6 +798,12 @@ function bowe_codes_group_users_tag( $args = '' ) {
 	if( empty( $bc_group_id ) )
 		return false;
 
+	if( empty( $bowecodes_id ) )
+		$bowecodes_id = 'bc_group_users';
+
+	// for plugins and themes if they need to use different template parts for this shortcode
+	$template_part = apply_filters( 'bowe_codes_group_users_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groupmembers' ), $bowecodes_id, $args );
+
 	$group_users_arg = array( 
 			'exclude_admins_mods' => 0,
 			'group_id' => $bc_group_id,
@@ -749,9 +821,12 @@ function bowe_codes_group_users_tag( $args = '' ) {
 		$members_template->bowe_codes->size = $size;
 		$members_template->bowe_codes->content = !empty( $content ) ? $content : false;
 
-		$members_template->bowe_codes->backpat = array( 'bc' => 'bc_group_users' );
+		$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+
+		// adding a filter here so that plugins/themes can attach more datas to members_template
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_group_users_global', $members_template->bowe_codes, $bowecodes_id, $args, $group_users_arg );
 		
-		$html_members_box = bowe_codes_buffer_template_part( 'bowecodes', 'groupmembers' );;
+		$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring groups template from cached one
