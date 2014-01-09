@@ -2,7 +2,7 @@
 /*
 Plugin Name: Bowe Codes
 Plugin URI: http://imathi.eu/tag/bowe-codes/
-Description: adds BuddyPress specific shortcodes to display members/groups/blogs/forums
+Description: add BuddyPress specific shortcodes to display members/groups/blogs/forums
 Version: 2.5-beta2
 Requires at least: 3.5.1
 Tested up to: 3.6.1
