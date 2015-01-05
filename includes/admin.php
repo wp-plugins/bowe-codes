@@ -28,7 +28,7 @@ class Bowe_Codes_Admin {
 
 	/**
 	 * Includes the needed admin functions file
-	 * 
+	 *
 	 * @uses bowe_codes_get_plugin_includes_dir() to get the plugin's include dir
 	 */
 	public function includes() {
@@ -37,13 +37,13 @@ class Bowe_Codes_Admin {
 
 	/**
 	 * Adds some key actions to build the admin area of the plugin
-	 * 
+	 *
 	 * @uses is_multisite() to check for a network and eventually inject a field in BuddyPress main settings
 	 */
 	public function setup_actions() {
-		/* 
+		/*
 		The bowe code editor trick :
-		1/ we disable the wp admin bar by hooking init before priority 10 
+		1/ we disable the wp admin bar by hooking init before priority 10
 		2/ we temporarly create a dashboard submenu
 		3/ we remove it
 		4/ we load a script for quicktags and mce plugin to load a thickbox
@@ -58,7 +58,7 @@ class Bowe_Codes_Admin {
 
 		// Now let's add a regular settings page to eventually play with css.
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 14 );
-		
+
 		// finally, use BuddyPress settings field to allow superadmin eventually disable bowe codes for child blogs
 		if( is_multisite() )
 			add_action( 'bp_register_admin_settings', array( $this, 'network_settings' ) );
@@ -76,7 +76,7 @@ class Bowe_Codes_Admin {
 	 * Early hook to disable admin bar when using the Bowe Codes Editor
 	 *
 	 * Bowe Codes Editor 'trick' step 1
-	 * 
+	 *
 	 * @uses is_admin() to check again we're in backend
 	 */
 	public function admin_init() {
@@ -88,15 +88,15 @@ class Bowe_Codes_Admin {
 	 * Temporarly adds a submenu to dashboard
 	 *
 	 * Bowe Codes Editor 'trick' step 2
-	 * 
+	 *
 	 * @uses add_dashboard_page() to reference the handling function
 	 */
 	public function admin_menus() {
-		$hook = add_dashboard_page(  
-			__('Bowe Codes Editor', 'bowe-codes'), 
-			__('Bowe Codes Editor', 'bowe-codes'), 
-			'manage_options', 
-			'bowecodes-editor', 
+		$hook = add_dashboard_page(
+			__('Bowe Codes Editor', 'bowe-codes'),
+			__('Bowe Codes Editor', 'bowe-codes'),
+			'manage_options',
+			'bowecodes-editor',
 			array( $this, 'bc_editor' ) );
 
 		add_action( "load-$hook", array( $this, 'admin_load' ) );
@@ -134,7 +134,7 @@ class Bowe_Codes_Admin {
 	 * Adds some css
 	 *
 	 * Bowe Codes Editor 'trick' step 3
-	 * 
+	 *
 	 * @uses remove_submenu_page() to remove the dashboard submenu
 	 * @uses bowe_codes_get_plugin_url() to get plugin's url
 	 * @uses bowe_codes_get_version() to get plugin's version
@@ -165,7 +165,7 @@ class Bowe_Codes_Admin {
 
 	/**
 	 * Let's load some css and our javascript
-	 * 
+	 *
 	 * @uses wp_enqueue_style() to add our css to the WP enqueued styles
 	 * @uses bowe_codes_get_plugin_url() to get plugin's url
 	 * @uses bowe_codes_get_version() to get plugin's version
@@ -183,7 +183,7 @@ class Bowe_Codes_Admin {
 				'restricted'     => __( 'Put your restricted content here', 'bowe-codes' )
 			)
 		);
-		
+
 		// if plugins needs to load their scripts in the editor.
 		do_action( 'bowe_codes_editor_enqueue_scripts' );
 	}
@@ -192,7 +192,7 @@ class Bowe_Codes_Admin {
 	 * Adds some javascript in admin footer when needed
 	 *
 	 * Bowe Codes Editor 'trick' step 4
-	 * 
+	 *
 	 * @uses get_current_screen() to get the post type an make sure we're in a post / page
 	 * @uses add_query_arg() to add an argument to the admin url
 	 * @uses admin_url() to build the admin url
@@ -208,8 +208,8 @@ class Bowe_Codes_Admin {
 		<script type="text/javascript">
 		if ( typeof QTags != 'undefined' )
 			QTags.addButton( 'eg_tcode', '[bc]', boweCodesLaunchEditor );
-			
-		function boweCodesLaunchEditor() { 
+
+		function boweCodesLaunchEditor() {
 			var url = "<?php echo $url;?>";
 			tb_show("<?php echo $window_title;?>", url + '&amp;TB_iframe=true');
 		}
@@ -219,7 +219,7 @@ class Bowe_Codes_Admin {
 
 	/**
 	 * References the bowe codes button in mce external plugins
-	 * 
+	 *
 	 * @param  array  $plugin_array the list of mce plugins
 	 * @uses get_current_screen() to get the post type an make sure we're in a post / page
 	 * @uses is_admin() to make sure (again!) we're in WordPress backend..
@@ -227,11 +227,17 @@ class Bowe_Codes_Admin {
 	 * @return array the plugin array + our plugin
 	 */
 	public function register_tinymce_plugin( $plugin_array = array() ) {
-		if ( !isset( get_current_screen()->post_type ) || !in_array( get_current_screen()->post_type, array( 'post', 'page') ) )
+		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
 			return $plugin_array;
-		
-		if( is_admin() )
-			$plugin_array['MCEbowecodes'] = bowe_codes_get_plugin_url().'js/bowecodes/editor_plugin.js';
+		}
+
+		$post_type = get_current_screen()->post_type;
+
+		if ( empty( $post_type ) || ! in_array( $post_type, array( 'post', 'page' ) ) ) {
+			return $plugin_array;
+		}
+
+		$plugin_array['MCEbowecodes'] = bowe_codes_get_plugin_url() . 'js/bowecodes/editor_plugin.js';
 
 		return $plugin_array;
 	}
@@ -256,7 +262,7 @@ class Bowe_Codes_Admin {
 	/**
 	 * Registers a submenu to settings to let admins customize Bowe Codes settings
 	 *
-	 * Checks for current version of the plugin against the one in database to 
+	 * Checks for current version of the plugin against the one in database to
 	 * eventually update it.
 	 *
 	 * @uses add_options_page() to add the settings page
@@ -272,19 +278,19 @@ class Bowe_Codes_Admin {
 			'bowecodes-options',
 			'bowe_codes_settings_page'
 		);
-		
+
 		if( bp_get_option( 'bowe-codes-version', '' ) != bowe_codes_get_version() ) {
-			
+
 			do_action( 'bowe_codes_upgrade' );
-			
+
 			bp_update_option( 'bowe-codes-version', bowe_codes_get_version() );
 		}
 	}
-	
+
 	/**
 	 * In the multisite case takes benefit of BuddyPress settings page
 	 * in order to avoid creating one !
-	 * 
+	 *
 	 * @uses add_settings_field to add our setting field to bp_main settings area
 	 * @uses register_setting() to register it and specify the sanitization callback
 	 */
@@ -293,7 +299,7 @@ class Bowe_Codes_Admin {
 		add_settings_field( 'bc_enable_network', __( 'Allow child blogs to use Bowe Codes',   'bowe-codes' ), 'bp_admin_setting_callback_bowe_codes',   'buddypress', 'bp_main' );
 		register_setting( 'buddypress', 'bc_enable_network',   'sanitize_text_field' );
 	}
-	
+
 	/**
 	 * Enqueues a little javascript in the widget admin for Bowe Codes Widget
 	 *
@@ -309,11 +315,11 @@ class Bowe_Codes_Admin {
 				'loadertxt'      => __( 'Building the form, please wait...', 'bowe-codes' )
 			)
 		);
-		
+
 		// if plugins needs to load their scripts.
 		do_action( 'bowe_codes_widget_enqueue_scripts' );
 	}
-	
+
 }
 
 endif;
