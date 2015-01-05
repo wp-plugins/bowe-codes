@@ -225,6 +225,12 @@ class Bowe_Codes_Shortcodes {
 					array( 'id' => 'subject', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Display subject', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 30, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'all', 'required' => false, 'caption' => __( 'Read Status', 'bowe-codes' ), 'choices' => array(
+							'all'    => __( 'All status',    'bowe-codes' ),
+							'unread' => __( 'Unread status', 'bowe-codes' ),
+							'read'   => __( 'Read status',   'bowe-codes' ),
+						)
+					),
 					array( 'id' => 'excerpt', 'type' => 'int', 'default' => 75, 'required' => false, 'caption' => __( 'Excerpt length', 'bowe-codes' ) ),
 					array( 'id' => 'class', 'type' => 'string', 'default' => 'my_messages', 'required' => false, 'caption' => __( 'Css Class', 'bowe-codes' ) )
 				),

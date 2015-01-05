@@ -12,7 +12,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 function bowe_codes_version() {
 	echo bowe_codes_get_version();
 }
-	
+
 	/**
 	 * Returns version of the plugin
 	 *
@@ -107,18 +107,18 @@ function bowe_codes_plugin_includes_dir() {
 
 /**
  * Adds plugin's templates folder to BuddyPress template stack
- * 
+ *
  * @since  2.5
- * 
+ *
  * @param  array $templates the template stack
  * @uses   bowe_codes_get_plugin_dir() to get plugin's directory path
  * @uses   trailingslashit() to add an ending slash to the path
  * @return array            the template stack with plugin's templates folder included
  */
 function bowe_codes_add_template_stack( $templates ) {
-	
+
 	$templates[] = trailingslashit( bowe_codes_get_plugin_dir() . 'templates' );
-	
+
 	return $templates;
 }
 
@@ -130,7 +130,7 @@ function bowe_codes_add_template_stack( $templates ) {
  * Trick to return exluded profile fields based on included ones
  *
  * As BuddyPress only allows an exclude args :(
- * 
+ *
  * @param  array $include the list of profile field to include
  * @global bp the main BuddyPress global
  * @global wpdb WordPress Database class
@@ -139,26 +139,26 @@ function bowe_codes_add_template_stack( $templates ) {
  */
 function bowe_codes_include_fields( $include = false ) {
 	global $bp, $wpdb;
-	
+
 	if( empty( $include ) )
 		return false;
-		
+
 	$include = implode( "','", $include );
-		
+
 	$exclude = $wpdb->get_col( "SELECT id FROM {$bp->profile->table_name_fields} WHERE parent_id = 0 AND name NOT IN('".$include."')" );
-	
+
 	if( is_array( $exclude ) && count( $exclude ) >= 1 )
 		return implode( ',', $exclude);
 	else
 		return false;
-	
+
 }
 
 /**
  * Builds the html part for group(s) & member(s) shortcodes
- * 
+ *
  * @since  2.5
- * 
+ *
  * @param  string $slug
  * @param  string $name
  * @uses bp_buffer_template_part() to get the template to apply
@@ -214,7 +214,7 @@ function bowe_codes_html_member( $user_id, $avatar=false, $size="50", $fields ='
 
 /**
  * Handling function for bc_member shortcode
- * 
+ *
  * @global BP_Core_Members_Template $members_template
  * @param  array $args the shortcode arguments
  * @uses   bp_core_get_userid() to get user's id from his login
@@ -232,13 +232,13 @@ function bowe_codes_member_tag( $args = '' ) {
 		return false;
 
 	extract( $args, EXTR_SKIP );
-	
+
 	if( !isset( $fields ) )
 		$fields = false;
 
 	$user_id = bp_core_get_userid( $name );
-	
-	if( empty( $user_id ) ) 
+
+	if( empty( $user_id ) )
 		return false;
 
 	if( empty( $class ) )
@@ -274,7 +274,7 @@ function bowe_codes_member_tag( $args = '' ) {
 
 /**
  * Gets user_ids form users logins
- * 
+ *
  * @param  string $login_list comma separated list of users logins
  * @uses   bp_core_get_userid() to get user's id from his login
  * @return array the list of user ids
@@ -286,7 +286,7 @@ function bowe_codes_get_members_by_login( $login_list = '' ) {
 	$user_ids = array();
 
 	foreach( (array) $login_list as $login ) {
-		$user_ids[] = bp_core_get_userid( $login ); 
+		$user_ids[] = bp_core_get_userid( $login );
 	}
 
 	if( empty( $user_ids ) || count( $user_ids ) < 1 )
@@ -301,7 +301,7 @@ function bowe_codes_get_members_by_login( $login_list = '' ) {
  * Since 2.0, we exclusively use the members loop
  * In case of featured members, the include argument of the first
  * loop becomes the exclude one of the second loop.
- * 
+ *
  * @global BP_Core_Members_Template $members_template
  * @param  array $args the shortcode arguments
  * @uses   bowe_codes_get_members_by_login() to get user ids from user logins
@@ -322,7 +322,7 @@ function bowe_codes_members_tag( $args = '' ){
 		return false;
 
 	$html_members_box = false;
- 
+
 	extract( $args, EXTR_SKIP );
 
 	if( empty( $bowecodes_id ) )
@@ -330,9 +330,9 @@ function bowe_codes_members_tag( $args = '' ){
 
 	// for plugins and themes if they need to use different template parts for this shortcode
 	$template_part = apply_filters( 'bowe_codes_members_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $bowecodes_id, $args );
-	
+
 	$exclude_members_from_loop = $featured_members = array();
-	
+
 	if( !empty( $featured ) ) {
 		$featured_list = explode( ',', $featured );
 
@@ -345,7 +345,7 @@ function bowe_codes_members_tag( $args = '' ){
 			if( bp_has_members( $featured_arg ) ){
 				//attaching bowe codes settings in members_template
 				$members_template->bowe_codes = new stdClass();
-				
+
 				foreach( $members_template->members as $featured )
 					$featured->featured = true;
 
@@ -360,7 +360,7 @@ function bowe_codes_members_tag( $args = '' ){
 
 					// adding a filter here so that plugins/themes can attach more datas to members_template
 					$members_template->bowe_codes = apply_filters( 'bowe_codes_members_featured_global', $members_template->bowe_codes, $bowecodes_id, $args );
-					
+
 					$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
 					//restoring members template from cached one
@@ -375,8 +375,8 @@ function bowe_codes_members_tag( $args = '' ){
 	}
 
 	$user_id = 0;
-	
-	if( isset( $friends ) && isset( $dynamic ) && !empty( $dynamic ) && bp_is_user() ) 
+
+	if( isset( $friends ) && isset( $dynamic ) && !empty( $dynamic ) && bp_is_user() )
 		$user_id = bp_displayed_user_id();
 	elseif( isset( $friends ) )
 		$user_id = bp_loggedin_user_id();
@@ -388,9 +388,9 @@ function bowe_codes_members_tag( $args = '' ){
 
 	if( !empty( $exclude_members_from_loop ) && is_array( $exclude_members_from_loop ) && count( $exclude_members_from_loop ) > 0 )
 		$members_arg['exclude'] = $exclude_members_from_loop;
-	
+
 	$members_arg = apply_filters( 'bowe_codes_members_tag_args', $members_arg, $args );
-	
+
 	if( bp_has_members( $members_arg ) ){
 		//attaching bowe codes settings in members_template
 		$members_template->bowe_codes = new stdClass();
@@ -425,7 +425,7 @@ function bowe_codes_members_tag( $args = '' ){
 
 /**
  * Gets the sender id for a given notification
- * 
+ *
  * @param  string $date_notified
  * @global $wpdb the WordPress database class
  * @uses   buddypress() to get BuddyPress main instance
@@ -440,7 +440,7 @@ function bowe_codes_get_sender( $date_notified ){
 
 /**
  * Handling function for bc_notifications shortcode
- * 
+ *
  * @param  array $args the shortcode arguments
  * @uses   is_user_logged_in() to check the user is logged in
  * @uses   BP_Core_Notification::get_all_for_user to fetches all the notifications
@@ -453,18 +453,18 @@ function bowe_codes_get_sender( $date_notified ){
 function bowe_codes_notifications_tag( $args = '' ){
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
-	
+
 	if( !is_user_logged_in() ) return false;
-	
+
 	$notifications = BP_Core_Notification::get_all_for_user( bp_loggedin_user_id() );
 	$notifications_content = bp_core_get_notifications_for_user( bp_loggedin_user_id() );
-	
+
 	$html_notifications_box = '<div class="'.$class.'">';
 
 	if( !empty( $notifications_content ) && count( $notifications_content ) > 0 ){
-		
+
 		$html_notifications_box .='<ul class="'.$class.'-ul">';
 
 		for( $i=0 ;$i < count( $notifications_content ); $i++ ){
@@ -499,9 +499,9 @@ function bowe_codes_notifications_tag( $args = '' ){
 
 /**
  * Builds the html part for a single group
- * 
+ *
  * @deprecated 2.5
- * 
+ *
  * @param  int  $id
  * @param  string  $name
  * @param  string  $slug
@@ -509,7 +509,7 @@ function bowe_codes_notifications_tag( $args = '' ){
  * @param  boolean $avatar
  * @param  string $permalink
  * @param  boolean $desc
- * 
+ *
  * @uses bowe_codes_group_tag() as a fallback
  */
 function bowe_codes_html_group( $id, $name, $slug, $size="50", $avatar = false, $permalink = false, $desc = false ){
@@ -524,13 +524,13 @@ function bowe_codes_html_group( $id, $name, $slug, $size="50", $avatar = false, 
 		'size'   => $size,
 		'desc'   => $desc
 	);
-	
+
 	return bowe_codes_group_tag( $args );
 }
 
 /**
  * Handling function for bc_group shortcode
- * 
+ *
  * @global BP_Groups_Template $groups_template
  * @param  array $args the shortcode arguments
  * @uses   groups_get_id() to get the group id from its slug
@@ -553,11 +553,11 @@ function bowe_codes_group_tag( $args = '' ){
 
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
-	
+
 	$bc_group_id = groups_get_id( $slug );
-	
+
 	if( empty( $bc_group_id ) )
 		return false;
 
@@ -586,19 +586,19 @@ function bowe_codes_group_tag( $args = '' ){
 
 		$html_group_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
-	
+
 	//restoring groups template from cached one
 	$groups_template = $cached_groups_template;
 	//restoring current group from cached one
 	if( !empty( $cached_current_group ) )
 		$bp->groups->current_group->slug = $cached_current_group;
-	
+
 	return $html_group_box;
 }
 
 /**
  * Builds an array of group ids from one of group slugs
- * 
+ *
  * @param  array $slug_list the list of featured group slug
  * @uses groups_get_id() to get the id of a group from its slug
  * @return array the group ids
@@ -629,7 +629,7 @@ function bowe_codes_get_groups_by_slug( $slug_list ) {
  * Since 2.0, we exclusively use the groups loop
  * In case of featured groups, the include argument of the first
  * loop becomes the exclude one of the second loop.
- * 
+ *
  * @global BP_Groups_Template $groups_template
  * @param  array $args the shortcode arguments
  * @uses   bowe_codes_get_groups_by_slug() to get an array of group ids out of a comma separated list of slugs
@@ -656,7 +656,7 @@ function bowe_codes_groups_tag( $args = '' ){
 
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
 
 	if( empty( $bowecodes_id ) )
@@ -665,10 +665,10 @@ function bowe_codes_groups_tag( $args = '' ){
 	// for plugins and themes if they need to use different template parts for this shortcode
 	$template_part = apply_filters( 'bowe_codes_groups_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $bowecodes_id, $args );
 
- 
+
 	$html_groups_box = '';
 	$exclude_groups_from_loop = $featured_groups = array();
-	
+
 	if( !empty( $featured ) ){
 
 		$featured_list = explode( ',', $featured );
@@ -681,7 +681,7 @@ function bowe_codes_groups_tag( $args = '' ){
 			if( bp_has_groups( $featured_arg ) ){
 				//attaching bowe codes settings in groups_template
 				$groups_template->bowe_codes = new stdClass();
-				
+
 				foreach( $groups_template->groups as $featured )
 					$featured->featured = true;
 
@@ -698,7 +698,7 @@ function bowe_codes_groups_tag( $args = '' ){
 					// adding a filter here so that plugins/themes can attach more datas to groups_template
 					$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $bowecodes_id, $args );
 
-					
+
 					$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
 					//restoring groups template from cached one
@@ -717,13 +717,13 @@ function bowe_codes_groups_tag( $args = '' ){
 
 	if( !empty( $exclude_groups_from_loop ) && is_array( $exclude_groups_from_loop ) && count( $exclude_groups_from_loop ) > 0 )
 		$group_args['exclude'] = $exclude_groups_from_loop;
-	
+
 	// faut vérifier ce truc !!
 	if( !empty( $user_groups ) ){
 
 		if ( bp_is_user() && $dynamic )
 			$user_id = bp_displayed_user_id();
-		else 
+		else
 			$user_id = bp_loggedin_user_id();
 
 		if( !empty( $user_id ) )
@@ -731,7 +731,7 @@ function bowe_codes_groups_tag( $args = '' ){
 		else
 			return $html_groups_box;
 	}
-	
+
 	$group_args = apply_filters( 'bowe_codes_groups_tag_args', $group_args, $args );
 
 	if( bp_has_groups( $group_args ) ){
@@ -773,7 +773,7 @@ function bowe_codes_groups_tag( $args = '' ){
 
 /**
  * Handling function for bc_group_users shortcode
- * 
+ *
  * @global BP_Core_Members_Template $members_template
  * @param  array $args the shortcode arguments
  * @uses   groups_get_id() to get group id from its slug
@@ -789,12 +789,12 @@ function bowe_codes_group_users_tag( $args = '' ) {
 
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
-	
+
 	$bc_group_id = groups_get_id( $slug );
 	$html_members_box = '';
-	
+
 	if( empty( $bc_group_id ) )
 		return false;
 
@@ -804,15 +804,15 @@ function bowe_codes_group_users_tag( $args = '' ) {
 	// for plugins and themes if they need to use different template parts for this shortcode
 	$template_part = apply_filters( 'bowe_codes_group_users_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groupmembers' ), $bowecodes_id, $args );
 
-	$group_users_arg = array( 
+	$group_users_arg = array(
 			'exclude_admins_mods' => 0,
 			'group_id' => $bc_group_id,
 			'max' => $amount,
 			'per_page' => $amount,
 	);
-			
+
 	$group_users_arg = apply_filters( 'bowe_codes_group_users_tag_args', $group_users_arg, $args );
-	
+
 	if ( bp_group_has_members( $group_users_arg ) ) {
 		//attaching bowe codes settings in members_template
 		$members_template->bowe_codes = new stdClass();
@@ -825,19 +825,19 @@ function bowe_codes_group_users_tag( $args = '' ) {
 
 		// adding a filter here so that plugins/themes can attach more datas to members_template
 		$members_template->bowe_codes = apply_filters( 'bowe_codes_group_users_global', $members_template->bowe_codes, $bowecodes_id, $args, $group_users_arg );
-		
+
 		$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring groups template from cached one
 	$members_template = $cached_members_template;
-	
+
 	return $html_members_box;
 }
 
 /**
  * Handling function for bc_restrict_gm shortcode
- * 
+ *
  * @param  array $args the shortcode arguments
  * @uses groups_get_id() to get group id from its slug
  * @uses is_user_logged_in() to check if the user is logged in
@@ -849,11 +849,11 @@ function bowe_codes_group_users_tag( $args = '' ) {
 function bowe_code_hide_post_content_tag( $args = '' ) {
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
 
 	$bc_group_id = false;
-	
+
 	// if no group id content is return
 	if( empty( $group_id ) )
 		return __( 'No group id or group slug were given', 'bowe-codes' );
@@ -868,15 +868,15 @@ function bowe_code_hide_post_content_tag( $args = '' ) {
 
 	// if user not logeddin, he's asked to
 	if( !is_user_logged_in() ) {
-		
+
 		$message_unlogged = '<p class="'.$class.'">' . __('You must be loggedin to access to this content', 'bowe-codes') . '</p>';
 		return apply_filters( 'bowe_code_hide_post_unconnect_message', $message_unlogged );
 	}
-		
+
 
 	$user_id = bp_loggedin_user_id();
 
-	// if the user is a group member, let's return the content	
+	// if the user is a group member, let's return the content
 	if ( groups_is_user_member( $user_id, $bc_group_id ) )
 		return $content;
 
@@ -890,14 +890,14 @@ function bowe_code_hide_post_content_tag( $args = '' ) {
 		return apply_filters( 'bowe_code_hide_post_connect_message', $message_notgm, $bc_group_id );
 
 		}
-	
+
 }
 
 /** Messages ******************************************************/
 
 /**
  * Handling function for the shortcode bc_messages
- * 
+ *
  * @param  array $args the shortcode arguments
  * @global messages_template
  * @uses is_user_logged_in() to check for loggedin user
@@ -910,40 +910,50 @@ function bowe_code_hide_post_content_tag( $args = '' ) {
  */
 function bowe_codes_messages_tag( $args = '' ){
 	global $messages_template;
-	
-	if( !is_array( $args ) )
-		return false;
- 
-	extract( $args, EXTR_SKIP );
-	
-	if( !is_user_logged_in() ) 
-		return false;
-	
-	$html_messages_box = '<div class="'.$class.'">';
-	
-	if( bp_has_message_threads( array( 'box'=> 'inbox', 'per_page' => $amount ) ) ){
 
-		$html_messages_box .='<ul class="'.$class.'-ul">';
+	if ( ! is_array( $args ) ) {
+		return false;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return false;
+	}
+
+	$html_messages_box = '<div class="'. $args['class'] . '">';
+
+	$message_args = array(
+		'box'      => 'inbox',
+		'per_page' => $args['amount'],
+	);
+
+	if ( ! empty( $args['type'] ) ) {
+		$message_args['type'] = $args['type'];
+	}
+
+	if( bp_has_message_threads( $message_args ) ){
+
+		$html_messages_box .='<ul class="' . $args['class'] . '-ul">';
 
 		while ( bp_message_threads() ){
 			bp_message_thread();
-			$html_messages_box .='<li>';
+			$html_messages_box .= '<li>';
 			$sender_home = bp_core_get_user_domain( $messages_template->thread->last_sender_id );
-			if( !empty( $avatar ) )
-				$html_messages_box .= '<div class="bc_avatar"><a href="'.$sender_home.'" title="'.__('From:','bowe-codes').' '.bp_core_get_user_displayname( $messages_template->thread->last_sender_id ).'">'.bp_core_fetch_avatar('item_id=' . $messages_template->thread->last_sender_id . '&type=full&width='.$size.'&height='.$size ) . '</a></div>';
-			
+
+			if ( ! empty( $args['avatar'] ) ) {
+				$html_messages_box .= '<div class="bc_avatar"><a href="' . $sender_home . '" title="' . esc_html__( 'From:', 'bowe-codes' ) . ' ' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '">' . bp_core_fetch_avatar( array( 'item_id' => $messages_template->thread->last_sender_id, 'type' => 'full', 'width' => $args['size'], 'height' => $args['size'] ) ) . '</a></div>';
+			}
+
 			$html_messages_box .= '<div class="message-infos">';
 
-			if( empty( $avatar ) && !empty( $subject ) )
-				$html_messages_box .= '<span class="bc_from">'.__('From:','bowe-codes').' '.bp_get_message_thread_from().' </span>';
-			
-			if( empty( $avatar ) && empty( $subject ) )
-				$html_messages_box .= '<span class="bc_from">'.__('From:','bowe-codes').'<a href="'.bp_get_message_thread_view_link().'" title="'.__( "View Message", "buddypress" ).'">'.bp_core_get_user_displayname( $messages_template->thread->last_sender_id ).'</a>';
-			
-			if( !empty( $subject ) )
-				$html_messages_box .= '<span class="bc_subject"><a href="'.bp_get_message_thread_view_link().'" title="'.__( "View Message", "buddypress" ).'">'.bp_get_message_thread_subject().'</a></span>';
-			
-			$html_messages_box .= '<p class="bc_excerpt">'.strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, intval( $excerpt ) ) ).'</p>';
+			if ( empty( $args['avatar'] ) && ! empty( $args['subject'] ) ) {
+				$html_messages_box .= '<span class="bc_from">' . esc_html__( 'From:','bowe-codes' ) . ' ' . bp_get_message_thread_from() . ' </span>';
+			} else if ( empty( $args['avatar'] ) && empty( $args['subject'] ) ) {
+				$html_messages_box .= '<span class="bc_from">' . esc_html__( 'From:', 'bowe-codes' ) . '<a href="' . bp_get_message_thread_view_link() . '" title="' . esc_attr__( 'View Message', 'bowe-codes' ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a>';
+			} else if( ! empty( $args['subject'] ) ) {
+				$html_messages_box .= '<span class="bc_subject"><a href="' . bp_get_message_thread_view_link() . '" title="' . esc_attr__( 'View Message', 'bowe-codes' ) . '">' . bp_get_message_thread_subject() . '</a></span>';
+			}
+
+			$html_messages_box .= '<p class="bc_excerpt">'. strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, intval( $args['excerpt'] ) ) ).'</p>';
 			$html_messages_box .= '</div></li>';
 		}
 	}
@@ -955,7 +965,7 @@ function bowe_codes_messages_tag( $args = '' ){
 
 /**
  * Builds the html part for a single blog
- * 
+ *
  * @param  int $blog_id
  * @param  boolean $avatar
  * @param  string $size
@@ -969,21 +979,21 @@ function bowe_codes_html_blog( $blog_id, $avatar, $size, $desc ){
 
 	if( !empty( $avatar ) )
 		$blog_html .= '<div class="bc_avatar"><a href="'.get_blog_option( $blog_id, 'siteurl' ).'">'.get_avatar(get_blog_option( $blog_id, 'admin_email' ), $size ).'</a></div>';
-	
+
 	$blog_html .= '<div class="blog-infos">';
 	$blog_html .= '<h4><a href="'.get_blog_option('siteurl',$blog_id).'">'.get_blog_option( $blog_id, 'blogname' ).'</a></h4>';
-	
+
 	if( !empty( $desc ) )
 		$blog_html .= '<p>'.get_blog_option( $blog_id, 'blogdescription' ).'</p>';
-	
+
 	$blog_html .= '</div>';
-	
+
 	return $blog_html;
 }
 
 /**
  * Handling function for bc_blogs shortcode
- * 
+ *
  * @param  array $args the shortcode arguments
  * @global blog_id
  * @global blogs_template
@@ -998,19 +1008,19 @@ function bowe_codes_blogs_tag( $args = '' ){
 	// not available for children !
 	if( $blog_id != bp_get_root_blog_id() )
 		return false;
-	
+
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
-	
+
 	$html_blogs_box = '<div class="'.$class.'">';
 	$exclude_blogs_from_loop = array();
-	
+
 	if( !empty( $featured ) ){
 
 		$featured_list = explode( ',', $featured );
-		
+
 		if( count( $featured_list ) > 0 ){
 
 			$html_blogs_box .= '<div class="featured">';
@@ -1026,7 +1036,7 @@ function bowe_codes_blogs_tag( $args = '' ){
 		if( count( $featured_list ) == $amount ){
 			return $html_blogs_box.'</div>';
 		}
-		
+
 	}
 	if( bp_has_blogs( array( 'type' => $type, 'per_page' => $amount, 'max' => $amount ) ) ) {
 
@@ -1035,7 +1045,7 @@ function bowe_codes_blogs_tag( $args = '' ){
 		$j=0;
 		while ( bp_blogs() ){
 			bp_the_blog();
-			
+
 			$check = $amount - count($exclude_blogs_from_loop);
 
 			if( isset( $exclude_blogs_from_loop ) && in_array( $blogs_template->blogs[$j]->blog_id, $exclude_blogs_from_loop ) )
@@ -1043,19 +1053,19 @@ function bowe_codes_blogs_tag( $args = '' ){
 			elseif( $i <= $amount - count( $exclude_blogs_from_loop ) ){
 				if( !empty( $avatar ) )
 					$html_blogs_box .= '<li><div class="bc_avatar"><a href="'.bp_get_blog_permalink().'">'.bp_get_blog_avatar('width='.$size.'&height='.$size) . '</a></div>';
-				
-				else 
+
+				else
 					$html_blogs_box .= '<li>';
-				
+
 				$html_blogs_box .= '<div class="blog-infos">';
 				$html_blogs_box .= '<h4><a href="'.bp_get_blog_permalink().'">'.bp_get_blog_name().'</a></h4>';
-				
+
 				if( !empty( $desc ) )
 					$html_blogs_box .= '<p>'.bp_get_blog_description().'</p>';
-				
+
 				$html_blogs_box .= '</div></li>';
 			}
-			
+
 			$i+=1;
 			$j+=1;
 		}
@@ -1068,9 +1078,9 @@ function bowe_codes_blogs_tag( $args = '' ){
 
 /**
  * Gets the activity types after checking 1.7 function exists
- * 
+ *
  * @since  2.0.1
- * 
+ *
  * @uses bp_is_active to check for activity component
  * @uses bp_activity_get_types() to return the available activity types.
  * @return array the list of activities or warning message
@@ -1084,8 +1094,8 @@ function bowe_codes_activity_list_types() {
 }
 
 /**
- * Handling function for the bc_activity shortcode 
- * 
+ * Handling function for the bc_activity shortcode
+ *
  * @param  array $args the shortcode arguments
  * @uses the activity loop
  * @return string html for the list of activities
@@ -1093,17 +1103,17 @@ function bowe_codes_activity_list_types() {
 function bowe_codes_activity_tag( $args = '' ) {
 	if( !is_array( $args ) )
 		return false;
- 
+
 	extract( $args, EXTR_SKIP );
 
 	$html_activity_box = '<div class="'.$class.'">';
 
-	$activity_args = array( 
+	$activity_args = array(
 			'action' => $type,
 			'max' => $amount,
 			'per_page' => $amount
 	);
-	
+
 	$activity_args = apply_filters( 'bowe_codes_activity_tag_arg', $activity_args, $args );
 
 	if( bp_has_activities( $activity_args ) ) {
@@ -1114,10 +1124,10 @@ function bowe_codes_activity_tag( $args = '' ) {
 			bp_the_activity();
 
 			$html_activity_box .= '<li>';
-			
+
 			if( !empty( $avatar ) )
 				$html_activity_box .= '<div class="bc_avatar"><a href="'.bp_get_activity_user_link().'">'.bp_core_fetch_avatar( 'item_id='. bp_get_activity_user_id() .'&type=full&width='. $size .'&height='. $size ) . '</a></div>';
-			
+
 			$html_activity_box .= '<div class="activity-infos">';
 			$html_activity_box .= apply_filters( 'bowe_codes_activity_before_action', '' );
 			$html_activity_box .= '<div class="activity-action">'. bp_get_activity_action() .'</div>';
@@ -1125,7 +1135,7 @@ function bowe_codes_activity_tag( $args = '' ) {
 			$html_activity_box .= '<div class="activity-content">'. bp_get_activity_content_body() .'</div>';
 			$html_activity_box .= apply_filters( 'bowe_codes_activity_after_content', '' );
 			$html_activity_box .= '</div></li>';
-		} 
+		}
 		$html_activity_box .= '</ul>';
 	}
 
