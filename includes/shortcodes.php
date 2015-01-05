@@ -41,17 +41,19 @@ class Bowe_Codes_Shortcodes {
 
 		// core shortcodes are based on BuddyPress core components (always loaded)
 		$bowe_shortcodes = array(
-
 			'bc_member'        => array( $this, 'display_member'     ),
 			'bc_members'       => array( $this, 'display_members'    ),
-			'bc_notifications' => array( $this, 'display_notifications' )
-
 		);
 
-		if( bp_is_active( 'friends' ) )
-			$bowe_shortcodes['bc_friends'] = array( $this, 'display_friends' );
+		if ( bp_is_active( 'notifications' ) ) {
+			$bowe_shortcodes['bc_notifications'] = array( $this, 'display_notifications' );
+		}
 
-		if( bp_is_active( 'groups' ) ) {
+		if ( bp_is_active( 'friends' ) ) {
+			$bowe_shortcodes['bc_friends'] = array( $this, 'display_friends' );
+		}
+
+		if ( bp_is_active( 'groups' ) ) {
 			$bowe_shortcodes['bc_group'] = array( $this, 'display_group' );
 			$bowe_shortcodes['bc_groups'] = array( $this, 'display_groups' );
 			$bowe_shortcodes['bc_group_users'] = array( $this, 'display_group_users' );
@@ -59,14 +61,17 @@ class Bowe_Codes_Shortcodes {
 			$bowe_shortcodes['bc_restrict_gm'] = array( $this, 'display_restricted_content' );
 		}
 
-		if( bp_is_active( 'messages' ) )
+		if ( bp_is_active( 'messages' ) ) {
 			$bowe_shortcodes['bc_messages'] = array( $this, 'display_messages' );
+		}
 
-		if( bp_is_active( 'blogs' ) && $blog_id == bp_get_root_blog_id() && is_multisite() )
+		if ( bp_is_active( 'blogs' ) && $blog_id == bp_get_root_blog_id() && is_multisite() ) {
 			$bowe_shortcodes['bc_blogs'] = array( $this, 'display_blogs' );
+		}
 
-		if( bp_is_active( 'activity' ) )
+		if ( bp_is_active( 'activity' ) ) {
 			$bowe_shortcodes['bc_activity'] = array( $this, 'display_activity' );
+		}
 
 		// Setup the shortcodes
 		$this->codes = apply_filters( 'bowe_codes_shortcodes', $bowe_shortcodes );
@@ -84,7 +89,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/**
-	 * The shortcode settings ! 
+	 * The shortcode settings !
 	 *
 	 * It's a bit boaring but saves time for the Bowe Codes editor ;)
 	 *
@@ -94,11 +99,11 @@ class Bowe_Codes_Shortcodes {
 	 * @return the settings for the available shortcodes
 	 */
 	private function shortcode_settings() {
-		
-		$all_shortcodes_settings = array( 
 
-			'bc_member' => array( 
-				'attributes' => array( 
+		$all_shortcodes_settings = array(
+
+			'bc_member' => array(
+				'attributes' => array(
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
 					array( 'id' => 'name', 'type' => 'string', 'default' => '', 'required' => true, 'caption' => __( 'Login of the user', 'bowe-codes' ) ),
@@ -106,13 +111,13 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays a specific member.','bowe-codes' )
 			),
-			'bc_members' => array( 
+			'bc_members' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 10, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'active', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array( 
-							'active' => __( 'Last Active', 'bowe-codes' ), 
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'active', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array(
+							'active' => __( 'Last Active', 'bowe-codes' ),
 							'newest' => __( 'Newest Registered', 'bowe-codes' ),
 							'random' => __( 'Random order', 'bowe-codes' ),
 							'popular' => __( 'By popularity', 'bowe-codes' )
@@ -123,7 +128,7 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays members with or without avatars.', 'bowe-codes' )
 			),
-			'bc_notifications' => array( 
+			'bc_notifications' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 5, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
@@ -137,8 +142,8 @@ class Bowe_Codes_Shortcodes {
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 10, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'newest', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array( 
-							'active' => __( 'Last Active', 'bowe-codes' ), 
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'newest', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array(
+							'active' => __( 'Last Active', 'bowe-codes' ),
 							'newest' => __( 'Newest Registered', 'bowe-codes' ),
 							'random' => __( 'Random order', 'bowe-codes' ),
 							'popular' => __( 'By popularity', 'bowe-codes' )
@@ -150,7 +155,7 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays the friends of the current logged in user, or the friends of the member profile currently being viewed if the dynamic option is on.', 'bowe-codes' )
 			),
-			'bc_group' => array( 
+			'bc_group' => array(
 				'attributes' => array(
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
@@ -160,13 +165,13 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays a specific group.', 'bowe-codes' )
 			),
-			'bc_groups' => array( 
+			'bc_groups' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 10, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'popular', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array( 
-							'active' => __( 'Last Active', 'bowe-codes' ), 
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'popular', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array(
+							'active' => __( 'Last Active', 'bowe-codes' ),
 							'newest' => __( 'Newest Created', 'bowe-codes' ),
 							'random' => __( 'Random order', 'bowe-codes' ),
 							'popular' => __( 'By popularity', 'bowe-codes' ),
@@ -178,7 +183,7 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays groups with or without avatars.', 'bowe-codes' )
 			),
-			'bc_group_users' => array( 
+			'bc_group_users' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 10, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
@@ -188,13 +193,13 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays users for a given group.', 'bowe-codes' )
 			),
-			'bc_user_groups' => array( 
+			'bc_user_groups' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 10, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'popular', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array( 
-							'active' => __( 'Last Active', 'bowe-codes' ), 
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'popular', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array(
+							'active' => __( 'Last Active', 'bowe-codes' ),
 							'newest' => __( 'Newest Created', 'bowe-codes' ),
 							'random' => __( 'Random order', 'bowe-codes' ),
 							'popular' => __( 'By popularity', 'bowe-codes' ),
@@ -207,14 +212,14 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays the groups of the currently logged in user or the groups of the member profile currently being viewed if dynamic option is on.', 'bowe-codes' )
 			),
-			'bc_restrict_gm' => array( 
+			'bc_restrict_gm' => array(
 				'attributes' => array(
 					array( 'id' => 'group_id', 'type' => 'string', 'default' => '', 'required' => true, 'caption' => __( 'Group id or slug', 'bowe-codes' ) ),
 					array( 'id' => 'class', 'type' => 'string', 'default' => 'my_restrict_message', 'required' => false, 'caption' => __( 'Css Class', 'bowe-codes' ) )
 				),
 				'description' => __( 'Restrict post content to group members', 'bowe-codes' )
 			),
-			'bc_messages' => array( 
+			'bc_messages' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 5, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'subject', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Display subject', 'bowe-codes' ) ),
@@ -225,16 +230,16 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Displays the latest messages from the currently logged in user.', 'bowe-codes' )
 			),
-			'bc_blogs' => array( 
+			'bc_blogs' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 5, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
 					array( 'id' => 'size', 'type' => 'int', 'default' => 50, 'required' => false, 'caption' => __( 'Size in pixels', 'bowe-codes' ) ),
-					array( 'id' => 'type', 'type' => 'select', 'default' => 'active', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array( 
-							'active' => __( 'Last Active', 'bowe-codes' ), 
+					array( 'id' => 'type', 'type' => 'select', 'default' => 'active', 'required' => false, 'caption' => __( 'Order type', 'bowe-codes' ), 'choices' => array(
+							'active' => __( 'Last Active', 'bowe-codes' ),
 							'random' => __( 'Random order', 'bowe-codes' ),
 							'alphabetical' => __( 'Alphabetical', 'bowe-codes' )
-						) 
+						)
 					),
 					array( 'id' => 'featured', 'type' => 'string', 'default' => '', 'required' => false, 'caption' => __( 'Blog id or comma separated list of blog ids to stick at the top', 'bowe-codes' ) ),
 					array( 'id' => 'class', 'type' => 'string', 'default' => 'my_blogs', 'required' => false, 'caption' => __( 'Css Class', 'bowe-codes' ) ),
@@ -242,7 +247,7 @@ class Bowe_Codes_Shortcodes {
 				),
 				'description' => __( 'Shows blogs from across the site.', 'bowe-codes' )
 			),
-			'bc_activity' => array( 
+			'bc_activity' => array(
 				'attributes' => array(
 					array( 'id' => 'amount', 'type' => 'int', 'default' => 5, 'required' => false, 'caption' => __( 'Amount', 'bowe-codes' ) ),
 					array( 'id' => 'avatar', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Avatar', 'bowe-codes' ) ),
@@ -254,26 +259,27 @@ class Bowe_Codes_Shortcodes {
 			)
 		);
 
-		if( bp_is_active( 'xprofile' ) ) {
+		if ( bp_is_active( 'xprofile' ) ) {
 			$all_shortcodes_settings['bc_member']['attributes'][] = array( 'id' => 'fields', 'type' => 'string', 'default' => '', 'required' => false, 'caption' => __( 'xProfile field Name (separated by a comma if more than one)', 'bowe-codes' ) );
 			$all_shortcodes_settings['bc_member']['attributes'][] = array( 'id' => 'show_labels', 'type' => 'boolean', 'default' => 1, 'required' => false, 'caption' => __( 'Show labels of xProfile fields', 'bowe-codes' ) );
 			$all_shortcodes_settings['bc_members']['attributes'][3]['choices']['alphabetical'] = __( 'Alphabetical', 'bowe-codes' );
 			$all_shortcodes_settings['bc_friends']['attributes'][3]['choices']['alphabetical'] = __( 'Alphabetical', 'bowe-codes' );
 		}
 
-		if( is_multisite() )
+		if ( is_multisite() ) {
 			$all_shortcodes_settings['bc_blogs']['attributes'][3]['choices']['newest'] = __( 'Newest Created', 'bowe-codes' );
-		
+		}
+
 		// let people add their shortcode settings..
 		$all_shortcodes_settings = apply_filters( 'bowe_codes_shortcodes_settings', $all_shortcodes_settings );
 
-		$this->codes_settings = array_intersect_assoc( $all_shortcodes_settings, $this->codes );
+		$this->codes_settings = array_intersect_key( $all_shortcodes_settings, $this->codes );
 
 	}
 
 	/**
 	 * Returns the default attributes of a shortcode
-	 * 
+	 *
 	 * @param  string $shortcode the shortcode identifier
 	 * @return array  (associative) the default attributes
 	 */
@@ -286,12 +292,12 @@ class Bowe_Codes_Shortcodes {
 		foreach( $this->codes_settings[$shortcode]['attributes'] as $setting ) {
 			$default_atts[$setting['id']] = $setting['default'];
 		}
-		
+
 		if( is_array( $default_atts ) )
 			return $default_atts;
 		else
 			return false;
-	} 
+	}
 
 	/** Core shortcodes ******************************************************/
 
@@ -316,7 +322,7 @@ class Bowe_Codes_Shortcodes {
 		// Return contents of output buffer
 		return bowe_codes_members_tag( $bc_members );
 	}
-	
+
 	/** Notifications ******************************************************/
 
 	public function display_notifications( $atts = '') {
@@ -328,7 +334,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/** Friends ******************************************************/
-	
+
 	public function display_friends( $atts = '' ) {
 
 		$bc_friends = shortcode_atts( $this->default_attributes( 'bc_friends' ), $atts );
@@ -341,7 +347,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/** Groups ******************************************************/
-	
+
 	public function display_group( $atts = '' ) {
 
 		$bc_group = shortcode_atts( $this->default_attributes( 'bc_group' ), $atts );
@@ -391,7 +397,7 @@ class Bowe_Codes_Shortcodes {
 		// Return contents of output buffer
 		return bowe_codes_groups_tag( $bc_user_groups );
 	}
-	
+
 	public function display_restricted_content( $atts = '', $content = '' ) {
 
 		$bc_restrict_gm = shortcode_atts( $this->default_attributes( 'bc_restrict_gm' ), $atts );
@@ -404,7 +410,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/** Messages ******************************************************/
-	
+
 	public function display_messages( $atts = '' ) {
 
 		$bc_messages = shortcode_atts( $this->default_attributes( 'bc_messages' ), $atts );
@@ -414,7 +420,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/** Blogs ******************************************************/
-	
+
 	public function display_blogs( $atts = '' ) {
 
 		$bc_blogs = shortcode_atts( $this->default_attributes( 'bc_blogs' ), $atts );
@@ -424,7 +430,7 @@ class Bowe_Codes_Shortcodes {
 	}
 
 	/** Activities ******************************************************/
-	
+
 	public function display_activity( $atts = '' ) {
 
 		$bc_activity = shortcode_atts( $this->default_attributes( 'bc_activity' ), $atts );

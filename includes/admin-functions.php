@@ -15,7 +15,7 @@ function bowe_codes_get_shortcode_settings() {
 
 /**
  * Builds a form for the needed shortcode thanks to the attributes settings
- * 
+ *
  * @param  string $shortcode  the shortcode identifier
  * @param  array $attributes the attributes settings for this shortcode
  * @return string the form
@@ -23,44 +23,57 @@ function bowe_codes_get_shortcode_settings() {
 function bowe_codes_admin_shortode_build_form( $shortcode, $attributes ) {
 	$form = $class = false;
 
-	if( empty( $shortcode ) || empty( $attributes ) )
+	if ( empty( $shortcode ) || empty( $attributes ) ) {
 		return $form;
+	}
 
-	foreach( $attributes as $attribute ) {
+	foreach ( $attributes as $attribute ) {
 
-		switch( $attribute['type'] ) {
+		switch ( $attribute['type'] ) {
 			case 'hidden' :
 				break;
+
 			case 'boolean' :
 				$form .= '<tr valign="top"><th scope="row"><label for="'. $shortcode . '-'. $attribute['id'].'" data-defaultvalue="'.$attribute['default'].'">'.$attribute['caption'] .'</label></th>';
 				$form .= '<td><input type="radio" name="'. $shortcode . '-'. $attribute['id'].'" id="'. $shortcode . '-'. $attribute['id'].'-yes" value="1" '.checked( $attribute['default'],1 , false).'> '.__('Yes', 'bowe-codes') .'&nbsp;';
 				$form .= '<input type="radio" name="'. $shortcode . '-'. $attribute['id'].'" id="'. $shortcode . '-'. $attribute['id'].'-no" value="0" '.checked( $attribute['default'],0 , false).'> '.__('No', 'bowe-codes').'</td>';
 				$form .='</tr>';
 				break;
+
 			case 'select' :
+			case 'multiselect' :
 				$form .= '<tr valign="top"><th scope="row"><label for="'. $shortcode . '-'. $attribute['id'].'" data-defaultvalue="'.$attribute['default'].'">'.$attribute['caption'] .'</label></th>';
-				$form .= '<td><select name="'. $shortcode . '-'. $attribute['id'].'" id="'. $shortcode . '-'. $attribute['id'].'">';
-					if( !empty( $attribute['choices'] ) ) {
-						foreach( $attribute['choices'] as $kchoice => $vchoice ) {
-							$form .= '<option value="'.$kchoice.'" '.selected( $attribute['default'], $kchoice, false ).'>'.$vchoice.'</option>';
-						}
+				$form .= '<td><select name="' . $shortcode . '-' . $attribute['id'] . '" id="' . $shortcode . '-' . $attribute['id'] . '"';
+
+				if ( 'multiselect' == $attribute['type'] ) {
+					$form .= ' multiple';
+				}
+
+				$form .= '>';
+
+				if ( ! empty( $attribute['choices'] ) ) {
+					foreach ( $attribute['choices'] as $kchoice => $vchoice ) {
+						$form .= '<option value="'.$kchoice.'" '. selected( $attribute['default'], $kchoice, false ) .'>'.$vchoice.'</option>';
 					}
+				}
+
 				$form .= '</select></td>';
 				break;
+
 			case 'int' :
 				$form .= '<tr valign="top"><th scope="row"><label for="'. $shortcode . '-'. $attribute['id'].'" data-defaultvalue="'.$attribute['default'].'">'.$attribute['caption'] .'</label></th>';
 				$form .= '<td><input type="number" min="1" step="1" name="'. $shortcode . '-'. $attribute['id'].'" id="'. $shortcode . '-'. $attribute['id'].'" value="'.$attribute['default'].'"/></td>';
 				$form .='</tr>';
 				break;
+
 			default:
 				$form .= '<tr valign="top"><th scope="row"><label for="'. $shortcode . '-'. $attribute['id'].'" data-defaultvalue="'.$attribute['default'].'">'.$attribute['caption'] .'</label></th>';
-				
+
 				$class = !empty( $attribute['required'] ) ? ' class="required"' : '';
 				$form .= '<td><input type="text" name="'. $shortcode . '-'. $attribute['id'].'" id="'. $shortcode . '-'. $attribute['id'].'" value="'.$attribute['default'].'" '.$class.'/></td>';
 				$form .='</tr>';
 				break;
 		}
-		
 	}
 
 	$form = apply_filters( 'bowe_codes_admin_shortode_build_form', $form, $shortcode, $attributes );
@@ -130,23 +143,23 @@ function bowe_codes_admin_shortcode_selectbox() {
  */
 function bowe_codes_settings_page() {
 	$updated = false;
-	
+
 	if( !empty( $_POST['_bowec_save'] ) ) {
 
 		check_admin_referer( 'bowe-codes-admin' );
-		
+
 		if( !empty( $_POST['bc_default_css'] ) )
 			update_option( 'bc_default_css', sanitize_text_field( $_POST['bc_default_css'] ) );
-			
+
 		$updated = true;
-		
+
 	}
 	$defaultcss = file_get_contents( bowe_codes_get_plugin_dir() .'css/bowe-codes.css' );
 	$viewable = explode( '/* administration */', $defaultcss );
 	$css_enable = get_option( 'bc_default_css', 'no' );
 	?>
 	<div class="wrap">
-		
+
 		<?php screen_icon( 'bowe-codes' ); ?>
 
 		<h2><?php _e( 'Bowe Codes Settings', 'bowe-codes' );?></h2>
