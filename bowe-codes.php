@@ -4,8 +4,8 @@ Plugin Name: Bowe Codes
 Plugin URI: http://imathi.eu/tag/bowe-codes/
 Description: add BuddyPress specific shortcodes to display members/groups/blogs/forums
 Version: 2.5-beta2
-Requires at least: 3.5.1
-Tested up to: 3.6.1
+Requires at least: 4.0
+Tested up to: 4.1
 License: GNU/GPL 2
 Author: imath
 Author URI: http://imathi.eu/
@@ -69,7 +69,7 @@ final class BoweStrap {
 
 	/**
 	 * Sets some globals
-	 * 
+	 *
 	 * @uses plugin_basename() to get plugin name
 	 * @uses plugin_dir_path() to get plugin dir path
 	 * @uses plugin_dir_url() to get plugin dir url
@@ -99,12 +99,12 @@ final class BoweStrap {
 		/** translation ***********************************************************/
 
 		$this->domain       = 'bowe-codes';
-		
+
 	}
 
 	/**
 	 * Includes the needed files
-	 * 
+	 *
 	 * @uses is_admin() to check for backend area before including admin file
 	 */
 	private function includes() {
@@ -121,7 +121,7 @@ final class BoweStrap {
 
 	/**
 	 * Sets some key actions
-	 * 
+	 *
 	 * @uses is_admin() to check for backend area before hooking bp_loaded
 	 */
 	private function setup_actions() {
@@ -131,26 +131,26 @@ final class BoweStrap {
 
 		if( is_admin() )
 			add_action( 'bp_loaded', array( $this, 'load_admin' ), 10 );
-			
+
 		// loads the languages..
 		add_action( 'bp_init', array( $this, 'load_textdomain' ), 6 );
 	}
 
 	/**
 	 * Register the different Bowe Codes shortcodes
-	 * 
+	 *
 	 * @uses Bowe_Codes_Shortcodes() the main shortcode class
 	 */
 	public function register_shortcodes() {
 		// allows people to create new shortcodes ;)
 		do_action_ref_array( 'bowe_codes_ready', array( &$this ) );
-		
+
 		$this->shortcodes = new Bowe_Codes_Shortcodes();
 	}
 
 	/**
 	 * Loads the css by checking first if enable and then in theme dirs
-	 * 
+	 *
 	 * @uses get_option() to eventually abort if css is disabled by admin
 	 * @uses trailingslashit() to add a final slash to url/path
 	 * @uses get_stylesheet_directory() to get child theme directory
@@ -162,12 +162,12 @@ final class BoweStrap {
 	public function enqueue_scripts() {
 		if( 'yes' == get_option( 'bc_default_css', 'no' ) )
 			return;
-		
+
 		$file = 'css/bowe-codes.css';
-		
+
 		// Check child theme
 		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $file ) ) {
-			$location = trailingslashit( get_stylesheet_directory_uri() ) . $file ; 
+			$location = trailingslashit( get_stylesheet_directory_uri() ) . $file ;
 			$handle   = 'bowe-codes-child-css';
 
 		// Check parent theme
@@ -180,13 +180,13 @@ final class BoweStrap {
 			$location = $this->plugin_url . $file;
 			$handle   = 'bowe-codes-css';
 		}
-		
+
 		wp_enqueue_style(  $handle, $location, false, $this->version );
 	}
 
 	/**
 	 * Loads the admin part of Bowe Codes
-	 * 
+	 *
 	 * @uses Bowe_Codes_Admin() the main admin class
 	 */
 	public function load_admin() {
@@ -195,7 +195,7 @@ final class BoweStrap {
 
 	/**
 	 * Loads the translation files
-	 * 
+	 *
 	 * @uses get_locale() to get the language of WordPress config
 	 * @uses load_texdomain() to load the translation if any is available for the language
 	 */
@@ -220,7 +220,7 @@ final class BoweStrap {
 /**
  * Main Bowe Codes Function
  *
- * Loads the BoweStrap class once BuddyPress is loaded 
+ * Loads the BoweStrap class once BuddyPress is loaded
  * First checks for multsite config and super admin settings
  *
  * @global int blog_id the current blog id
@@ -237,10 +237,10 @@ function bowecodes() {
 		require( plugin_dir_path( __FILE__ ) . 'includes/1.3.php'  );
 		return false;
 	}
-	
+
 	if( is_multisite() && $blog_id != bp_get_root_blog_id() && bp_get_option( 'bc_enable_network', 'yes' ) != 'yes' )
 		return false;
-	
+
 	return BoweStrap::instance();
 }
 

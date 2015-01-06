@@ -131,7 +131,7 @@ class Bowe_Codes_Admin {
 
 	/**
 	 * Removes the Bowe Codes editor submenu from dashboard
-	 * Adds some css
+	 * Adds some css for the WP Editor
 	 *
 	 * Bowe Codes Editor 'trick' step 3
 	 *
@@ -140,25 +140,30 @@ class Bowe_Codes_Admin {
 	 * @uses bowe_codes_get_version() to get plugin's version
 	 */
 	public function admin_head() {
-		remove_submenu_page( 'index.php', 'bowecodes-editor'   );
+		remove_submenu_page( 'index.php', 'bowecodes-editor' );
 
-		$icon32_url = bowe_codes_get_plugin_url() .'images/icons32.png?ver='. bowe_codes_get_version();
+		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen_id = get_current_screen()->id;
+		$screens = array(
+			'post' => 1,
+			'page' => 1,
+		);
+
+		if ( empty( $screen_id ) || empty( $screens[ $screen_id ] ) ) {
+			return;
+		}
 		?>
 		<style type="text/css" media="screen">
-        /*<![CDATA[*/
+		/*<![CDATA[*/
 
-            /* Icon 32 */
-            #icon-bowe-codes {
-                    background: url('<?php echo $icon32_url; ?>');
-                    background-repeat: no-repeat;
-            }
+		.dashicons-boweddypress:before {
+			content:"\f448";
+		}
 
-            /* Icon Positions */
-            #icon-bowe-codes {
-                    background-position: 0px 0px;
-            }
-
-        /*]]>*/
+		/*]]>*/
         </style>
         <?php
 	}
