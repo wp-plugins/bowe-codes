@@ -43,23 +43,23 @@ class Bowe_Codes_Widget extends WP_Widget {
 	 * @return string html the content of the shortcode
 	 */
 	function widget( $args, $instance ) {
-		extract( $args );
-
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Bowe Codes widget', 'bowe-codes' ) : $instance['title'], $instance, $this->id_base);
 		$shortcode = apply_filters( 'bowe_codes_widget_shortcode', $instance['shortcode'], $instance, $this->id_base );
 		$shortcode_opts = apply_filters( 'bowe_codes_widget_shortcode_opts', $instance['shortcode_opts'], $instance, $this->id_base );
 
-		if( empty( $shortcode ) )
+		if ( empty( $shortcode ) ) {
 			return false;
+		}
 
 		$output = '['. $shortcode;
 
-		echo $before_widget;
+		echo $args['before_widget'];
 
-		if ( $title )
-			echo $before_title . $title . $after_title;
+		if ( ! empty( $title ) ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
 
-		if( !empty( $shortcode_opts ) && is_array( $shortcode_opts ) && count( $shortcode_opts ) > 0 ) {
+		if ( ! empty( $shortcode_opts ) && is_array( $shortcode_opts ) && count( $shortcode_opts ) > 0 ) {
 
 			foreach( $shortcode_opts as $key => $val ) {
 				$output .= ' '. $key.'="' .$val. '"';
@@ -71,7 +71,7 @@ class Bowe_Codes_Widget extends WP_Widget {
 
 		echo do_shortcode( $output );
 
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 	/**

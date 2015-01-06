@@ -228,40 +228,43 @@ function bowe_codes_member_tag( $args = '' ) {
 	// caching members template
 	$cached_members_template = $members_template;
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
+	if ( ! isset( $args['fields'] ) ) {
+		$args['fields'] = false;
+	}
 
-	if( !isset( $fields ) )
-		$fields = false;
+	$user_id = bp_core_get_userid( $args['name'] );
 
-	$user_id = bp_core_get_userid( $name );
-
-	if( empty( $user_id ) )
+	if ( empty( $user_id ) ) {
 		return false;
+	}
 
-	if( empty( $class ) )
-		$class = 'my_member';
+	if ( empty( $args['class'] ) ) {
+		$args['class'] = 'my_member';
+	}
 
-	if( empty( $bowecodes_id ) )
-		$bowecodes_id = 'bc_member';
+	if ( empty( $args['bowecodes_id'] ) ) {
+		$args['bowecodes_id'] = 'bc_member';
+	}
 
 	// for plugins and themes if they need to use different template parts for this shortcode
-	$template_part = apply_filters( 'bowe_codes_member_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $bowecodes_id, $args );
+	$template_part = apply_filters( 'bowe_codes_member_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $args['bowecodes_id'], $args );
 
-	if( bp_has_members( array( 'include' => $user_id ) ) ) {
+	if ( bp_has_members( array( 'include' => $user_id ) ) ) {
 		//attaching bowe codes settings in members_template
-		$members_template->bowe_codes = new stdClass();
-		$members_template->bowe_codes->class = $class;
-		$members_template->bowe_codes->avatar = $avatar;
-		$members_template->bowe_codes->size = $size;
-		$members_template->bowe_codes->fields = $fields;
-		$members_template->bowe_codes->show_labels = $show_labels;
-		$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+		$members_template->bowe_codes              = new stdClass();
+		$members_template->bowe_codes->class       = $args['class'];
+		$members_template->bowe_codes->avatar      = $args['avatar'];
+		$members_template->bowe_codes->size        = $args['size'];
+		$members_template->bowe_codes->fields      = $args['fields'];
+		$members_template->bowe_codes->show_labels = $args['show_labels'];
+		$members_template->bowe_codes->backpat     = array( 'bc' => $args['bowecodes_id'] );
 
 		// adding a filter here so that plugins/themes can attach more datas to members_template
-		$members_template->bowe_codes = apply_filters( 'bowe_codes_member_global', $members_template->bowe_codes, $bowecodes_id, $args );
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_member_global', $members_template->bowe_codes, $args['bowecodes_id'], $args );
 
 		$html_member_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
@@ -318,48 +321,49 @@ function bowe_codes_members_tag( $args = '' ){
 	// caching members template
 	$cached_members_template = $members_template;
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
 	$html_members_box = false;
 
-	extract( $args, EXTR_SKIP );
-
-	if( empty( $bowecodes_id ) )
-		$bowecodes_id = 'bc_members';
+	if ( empty( $args['bowecodes_id'] ) ) {
+		$args['bowecodes_id'] = 'bc_members';
+	}
 
 	// for plugins and themes if they need to use different template parts for this shortcode
-	$template_part = apply_filters( 'bowe_codes_members_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $bowecodes_id, $args );
+	$template_part = apply_filters( 'bowe_codes_members_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'members' ), $args['bowecodes_id'], $args );
 
 	$exclude_members_from_loop = $featured_members = array();
 
-	if( !empty( $featured ) ) {
-		$featured_list = explode( ',', $featured );
+	if ( ! empty( $args['featured'] ) ) {
+		$featured_list = explode( ',', $args['featured'] );
 
 		$exclude_members_from_loop = bowe_codes_get_members_by_login( $featured_list );
 
-		if( !empty( $exclude_members_from_loop ) && is_array( $exclude_members_from_loop ) && count( $exclude_members_from_loop ) > 0  ) {
+		if ( ! empty( $exclude_members_from_loop ) && is_array( $exclude_members_from_loop ) && count( $exclude_members_from_loop ) > 0  ) {
 
-			$featured_arg = apply_filters( 'bowe_codes_members_tag_featured_args', array( 'include' => $exclude_members_from_loop, 'max' => $amount ), $args );
+			$featured_arg = apply_filters( 'bowe_codes_members_tag_featured_args', array( 'include' => $exclude_members_from_loop, 'max' => $args['amount'] ), $args );
 
 			if( bp_has_members( $featured_arg ) ){
 				//attaching bowe codes settings in members_template
 				$members_template->bowe_codes = new stdClass();
 
-				foreach( $members_template->members as $featured )
-					$featured->featured = true;
+				foreach ( $members_template->members as $member_featured ) {
+					$member_featured->featured = true;
+				}
 
 				//caching it to merge with regular members
 				$featured_members = $members_template->members;
 
-				if( count( $exclude_members_from_loop ) >= $amount ){
-					$members_template->bowe_codes->class = $class;
-					$members_template->bowe_codes->avatar = $avatar;
-					$members_template->bowe_codes->size = $size;
-					$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+				if ( count( $exclude_members_from_loop ) >= $args['amount'] ) {
+					$members_template->bowe_codes->class   = $args['class'];
+					$members_template->bowe_codes->avatar  = $args['avatar'];
+					$members_template->bowe_codes->size    = $args['size'];
+					$members_template->bowe_codes->backpat = array( 'bc' => $args['bowecodes_id'] );
 
 					// adding a filter here so that plugins/themes can attach more datas to members_template
-					$members_template->bowe_codes = apply_filters( 'bowe_codes_members_featured_global', $members_template->bowe_codes, $bowecodes_id, $args );
+					$members_template->bowe_codes = apply_filters( 'bowe_codes_members_featured_global', $members_template->bowe_codes, $args['bowecodes_id'], $args );
 
 					$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
@@ -376,38 +380,48 @@ function bowe_codes_members_tag( $args = '' ){
 
 	$user_id = 0;
 
-	if( isset( $friends ) && isset( $dynamic ) && !empty( $dynamic ) && bp_is_user() )
+	if ( isset( $args['friends'] ) && isset( $args['dynamic'] ) && ! empty( $args['dynamic'] ) && bp_is_user() ) {
 		$user_id = bp_displayed_user_id();
-	elseif( isset( $friends ) )
+	} else if ( isset( $args['friends'] ) ) {
+		// Display nothing if we can't get a user id
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
 		$user_id = bp_loggedin_user_id();
+	}
 
-	$members_arg = array( 'user_id' => $user_id, 'max' => $amount );
+	$members_arg = array( 'user_id' => $user_id, 'max' => $args['amount'] );
 
-	if( !empty( $type ) )
-		$members_arg['type'] = $type;
+	if ( ! empty( $args['type'] ) ) {
+		$members_arg['type'] = $args['type'];
+	}
 
-	if( !empty( $exclude_members_from_loop ) && is_array( $exclude_members_from_loop ) && count( $exclude_members_from_loop ) > 0 )
+	if ( ! empty( $exclude_members_from_loop ) && is_array( $exclude_members_from_loop ) && count( $exclude_members_from_loop ) > 0 ) {
 		$members_arg['exclude'] = $exclude_members_from_loop;
+	}
 
 	$members_arg = apply_filters( 'bowe_codes_members_tag_args', $members_arg, $args );
 
-	if( bp_has_members( $members_arg ) ){
+	if ( bp_has_members( $members_arg ) ) {
 		//attaching bowe codes settings in members_template
-		$members_template->bowe_codes = new stdClass();
-		$members_template->bowe_codes->class = $class;
-		$members_template->bowe_codes->avatar = $avatar;
-		$members_template->bowe_codes->size = $size;
-		if( !empty( $user_id ) )
+		$members_template->bowe_codes         = new stdClass();
+		$members_template->bowe_codes->class  = $args['class'];
+		$members_template->bowe_codes->avatar = $args['avatar'];
+		$members_template->bowe_codes->size   = $args['size'];
+
+		if ( ! empty( $user_id ) ) {
 			$members_template->bowe_codes->backpat = array( 'bc' => 'bc_friends' );
-		else
-			$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+		} else {
+			$members_template->bowe_codes->backpat = array( 'bc' => $args['bowecodes_id'] );
+		}
 
 		// adding a filter here so that plugins/themes can attach more datas to members_template
-		$members_template->bowe_codes = apply_filters( 'bowe_codes_members_global', $members_template->bowe_codes, $bowecodes_id, $args, $members_arg );
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_members_global', $members_template->bowe_codes, $args['bowecodes_id'], $args, $members_arg );
 
 		//we need to eventually merge with featured members !
 		$members_template->members = array_merge( $featured_members, $members_template->members );
-		$members_template->members = array_slice( $members_template->members, 0, $amount );
+		$members_template->members = array_slice( $members_template->members, 0, $args['amount'] );
 
 		$members_template->member_count = count( $members_template->members );
 		$members_template->total_member_count += count( $featured_members );
@@ -443,55 +457,79 @@ function bowe_codes_get_sender( $date_notified ){
  *
  * @param  array $args the shortcode arguments
  * @uses   is_user_logged_in() to check the user is logged in
- * @uses   BP_Core_Notification::get_all_for_user to fetches all the notifications
+ * @uses   bp_notifications_get_all_notifications_for_user to fetches all the notifications
  * @uses   bp_loggedin_user_id() to get current user id
- * @uses   bp_core_get_notifications_for_user() to get the content to output
+ * @uses   bp_notifications_get_notifications_for_user() to get the content to output
  * @uses   bp_core_fetch_avatar() to get the avatar of the item
  * @uses   bowe_codes_get_sender() to get the sender id in case of a notification related to a message
  * @return string html for the notifications
  */
 function bowe_codes_notifications_tag( $args = '' ){
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
+	if ( ! is_user_logged_in() ) {
+		return false;
+	}
 
-	if( !is_user_logged_in() ) return false;
+	$notifications = bp_notifications_get_all_notifications_for_user( bp_loggedin_user_id() );
+	$notifications_content = bp_notifications_get_notifications_for_user( bp_loggedin_user_id() );
 
-	$notifications = BP_Core_Notification::get_all_for_user( bp_loggedin_user_id() );
-	$notifications_content = bp_core_get_notifications_for_user( bp_loggedin_user_id() );
+	$html_notifications_box = '<div class="' . $args['class']  .'">';
 
-	$html_notifications_box = '<div class="'.$class.'">';
+	if ( ! empty( $notifications_content ) && count( $notifications_content ) > 0 ) {
 
-	if( !empty( $notifications_content ) && count( $notifications_content ) > 0 ){
+		$html_notifications_box .= '<ul class="' . $args['class'] . '-ul">';
 
-		$html_notifications_box .='<ul class="'.$class.'-ul">';
+		for ( $i=0 ;$i < count( $notifications_content ); $i++ ){
 
-		for( $i=0 ;$i < count( $notifications_content ); $i++ ){
+			if ( $i < $args['amount'] ) {
+				$html_notifications_box .= '<li>';
 
-			if( $i < $amount ){
-				$html_notifications_box .='<li>';
+				if ( ! empty( $args['avatar'] ) ) {
+					$html_notifications_box .= '<div class="bc_avatar">';
 
-				if( !empty( $avatar ) ){
-					if( $notifications[$i]->component_name == "groups" ){
-						if( $notifications[$i]->secondary_item_id != 0 ) $html_notifications_box .= '<div class="bc_avatar">'.bp_core_fetch_avatar( 'item_id=' . $notifications[$i]->secondary_item_id . '&object=group&type=full&avatar_dir=group-avatars&width='.$size.'&height='.$size ) . '</div>';
-						else $html_notifications_box .= '<div class="bc_avatar">'.bp_core_fetch_avatar( 'item_id=' . $notifications[$i]->item_id . '&object=group&type=full&avatar_dir=group-avatars&width='.$size.'&height='.$size ) . '</div>';
+					$avatar_fetch_args = array(
+						'item_id'    => $notifications[ $i ]->item_id,
+						'type'       => 'full',
+						'width'      => $args['size'],
+						'height'     => $args['size']
+					);
+
+					if ( 'groups' == $notifications[ $i ]->component_name ) {
+						$avatar_fetch_args = array_merge( $avatar_fetch_args, array(
+							'object'     => 'group',
+							'avatar_dir' => 'group-avatars',
+						) );
+
+						if ( $notifications[ $i ]->secondary_item_id != 0 ) {
+							$avatar_fetch_args['item_id'] = $notifications[ $i ]->secondary_item_id;
+						}
+
+					} else if ( 'messages' == $notifications[ $i ]->component_name ) {
+						$avatar_fetch_args['item_id'] = bowe_codes_get_sender( $notifications[$i]->date_notified );
+					} else if ( 'new_at_mention' ==  $notifications[ $i ]->component_action ) {
+						$avatar_fetch_args['item_id'] = $notifications[ $i ]->secondary_item_id;
 					}
-					elseif( $notifications[$i]->component_name == 'messages') $html_notifications_box .= '<div class="bc_avatar">'.bp_core_fetch_avatar( 'item_id=' . bowe_codes_get_sender( $notifications[$i]->date_notified ) . '&type=full&width='.$size.'&height='.$size ) . '</div>';
-					else $html_notifications_box .= '<div class="bc_avatar">'.bp_core_fetch_avatar( 'item_id=' . $notifications[$i]->item_id . '&type=full&width='.$size.'&height='.$size ) . '</div>';
+
+					$html_notifications_box .= bp_core_fetch_avatar( $avatar_fetch_args );
+					$html_notifications_box .= '</div>';
 				}
+
 				$html_notifications_box .= '<div class="notification-infos">';
-				$html_notifications_box .= '<p class="bc_notifications">'. $notifications_content[$i] .'</p>';
+				$html_notifications_box .= '<p class="bc_notifications">' . $notifications_content[ $i ] .'</p>';
 				$html_notifications_box .= '</div></li>';
 			}
 		}
-	}else{
-		$html_notifications_box .= '<ul class="'.$class.'-ul">';
+	} else {
+		$html_notifications_box .= '<ul class="' . $args['class'] . '-ul">';
 		$html_notifications_box .= '<li><div class="notification-infos">';
 		$html_notifications_box .= '<p class="bc_notifications">'. __( 'No new notifications.', 'bowe-codes' ) .'</p>';
 		$html_notifications_box .= '</div></li>';
 	}
-	$html_notifications_box .='</ul></div>';
+
+	$html_notifications_box .= '</ul></div>';
 	return $html_notifications_box;
 }
 
@@ -515,8 +553,9 @@ function bowe_codes_notifications_tag( $args = '' ){
 function bowe_codes_html_group( $id, $name, $slug, $size="50", $avatar = false, $permalink = false, $desc = false ){
 	_deprecated_function( __FUNCTION__, '2.5', 'bowe_codes_group_tag()' );
 
-	if( empty( $slug) )
+	if ( empty( $slug) ) {
 		return;
+	}
 
 	$args = array(
 		'slug'   => $slug,
@@ -546,52 +585,56 @@ function bowe_codes_group_tag( $args = '' ){
 	$cached_groups_template = $groups_template;
 
 	// on single group we need to temporarly empty the $bp->groups->current_group->slug
-	if( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
+	if ( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
 		$cached_current_group = $bp->groups->current_group->slug;
 		$bp->groups->current_group->slug = '';
 	}
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
+	$bc_group_id = groups_get_id( $args['slug'] );
 
-	$bc_group_id = groups_get_id( $slug );
-
-	if( empty( $bc_group_id ) )
+	if ( empty( $bc_group_id ) ) {
 		return false;
+	}
 
-	if( empty( $class ) )
-		$class = 'my_group';
+	if ( empty( $args['class'] ) ) {
+		$args['class'] = 'my_group';
+	}
 
-	if( empty( $bowecodes_id ) )
-		$bowecodes_id = 'bc_group';
+	if ( empty( $args['bowecodes_id'] ) ) {
+		$args['bowecodes_id'] = 'bc_group';
+	}
 
 	// for plugins and themes if they need to use different template parts for this shortcode
-	$template_part = apply_filters( 'bowe_codes_group_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $bowecodes_id, $args );
+	$template_part = apply_filters( 'bowe_codes_group_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $args['bowecodes_id'], $args );
 
 	$html_group_box = '';
 
-	if( bp_has_groups( array( 'include' => $bc_group_id ) ) ) {
+	if ( bp_has_groups( array( 'include' => $bc_group_id ) ) ) {
 		//attaching bowe codes settings in groups_template
-		$groups_template->bowe_codes = new stdClass();
-		$groups_template->bowe_codes->class = $class;
-		$groups_template->bowe_codes->avatar = $avatar;
-		$groups_template->bowe_codes->size = $size;
-		$groups_template->bowe_codes->group_description = $desc;
-		$groups_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+		$groups_template->bowe_codes                    = new stdClass();
+		$groups_template->bowe_codes->class             = $args['class'];
+		$groups_template->bowe_codes->avatar            = $args['avatar'];
+		$groups_template->bowe_codes->size              = $args['size'];
+		$groups_template->bowe_codes->group_description = $args['desc'];
+		$groups_template->bowe_codes->backpat           = array( 'bc' => $args['bowecodes_id'] );
 
 		// adding a filter here so that plugins/themes can attach more datas to groups_template
-		$groups_template->bowe_codes = apply_filters( 'bowe_codes_group_global', $groups_template->bowe_codes, $bowecodes_id, $args );
+		$groups_template->bowe_codes = apply_filters( 'bowe_codes_group_global', $groups_template->bowe_codes, $args['bowecodes_id'], $args );
 
 		$html_group_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
 
 	//restoring groups template from cached one
 	$groups_template = $cached_groups_template;
+
 	//restoring current group from cached one
-	if( !empty( $cached_current_group ) )
+	if ( ! empty( $cached_current_group ) ) {
 		$bp->groups->current_group->slug = $cached_current_group;
+	}
 
 	return $html_group_box;
 }
@@ -606,19 +649,22 @@ function bowe_codes_group_tag( $args = '' ){
 function bowe_codes_get_groups_by_slug( $slug_list ) {
 	$group_ids = array();
 
-	if( empty( $slug_list ) || !is_array( $slug_list ) )
+	if ( empty( $slug_list ) || ! is_array( $slug_list ) ) {
 		return false;
+	}
 
-	foreach( $slug_list as $slug ) {
+	foreach ( $slug_list as $slug ) {
 		$bc_group_id = false;
 		$bc_group_id = groups_get_id( $slug );
 
-		if( !empty( $bc_group_id ) )
+		if ( ! empty( $bc_group_id ) ) {
 			$group_ids[] = $bc_group_id;
+		}
 	}
 
-	if( empty( $group_ids ) || count( $group_ids ) < 1 )
+	if ( empty( $group_ids ) || count( $group_ids ) < 1 ) {
 		return false;
+	}
 
 	return $group_ids;
 }
@@ -649,55 +695,59 @@ function bowe_codes_groups_tag( $args = '' ){
 	$cached_groups_template = $groups_template;
 
 	// on single group we need to temporarly empty the $bp->groups->current_group->slug
-	if( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
+	if ( isset( $bp->groups->current_group->slug ) && $bp->groups->current_group->slug ) {
 		$cached_current_group = $bp->groups->current_group->slug;
 		$bp->groups->current_group->slug = '';
 	}
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
-
-	if( empty( $bowecodes_id ) )
-		$bowecodes_id = 'bc_groups';
+	if ( empty( $args['bowecodes_id'] ) ) {
+		$args['bowecodes_id'] = 'bc_groups';
+	}
 
 	// for plugins and themes if they need to use different template parts for this shortcode
-	$template_part = apply_filters( 'bowe_codes_groups_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $bowecodes_id, $args );
-
+	$template_part = apply_filters( 'bowe_codes_groups_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groups' ), $args['bowecodes_id'], $args );
 
 	$html_groups_box = '';
 	$exclude_groups_from_loop = $featured_groups = array();
 
-	if( !empty( $featured ) ){
+	if ( ! empty( $args['featured'] ) ) {
 
-		$featured_list = explode( ',', $featured );
+		$featured_list = explode( ',', $args['featured'] );
 		$exclude_groups_from_loop = bowe_codes_get_groups_by_slug( $featured_list );
 
-		if( !empty( $exclude_groups_from_loop ) && is_array( $exclude_groups_from_loop ) && count( $exclude_groups_from_loop ) > 0 ) {
+		if ( ! empty( $exclude_groups_from_loop ) && is_array( $exclude_groups_from_loop ) && count( $exclude_groups_from_loop ) > 0 ) {
 
-			$featured_arg = apply_filters( 'bowe_codes_groups_tag_featured_args', array( 'include' => $exclude_groups_from_loop, 'max' => $amount ), $args );
+			$featured_arg = apply_filters( 'bowe_codes_groups_tag_featured_args', array( 'include' => $exclude_groups_from_loop, 'max' => $args['amount'] ), $args );
 
-			if( bp_has_groups( $featured_arg ) ){
+			if ( bp_has_groups( $featured_arg ) ) {
 				//attaching bowe codes settings in groups_template
 				$groups_template->bowe_codes = new stdClass();
 
-				foreach( $groups_template->groups as $featured )
-					$featured->featured = true;
+				foreach ( $groups_template->groups as $group_featured ) {
+					$group_featured->featured = true;
+				}
 
 				//caching it to merge with regular groups
 				$featured_groups = $groups_template->groups;
 
-				if( count( $exclude_groups_from_loop ) >= $amount ){
-					$groups_template->bowe_codes->class = $class;
-					$groups_template->bowe_codes->avatar = $avatar;
-					$groups_template->bowe_codes->size = $size;
-					$groups_template->bowe_codes->content = !empty( $content ) ? $content : false;
+				if ( count( $exclude_groups_from_loop ) >= $args['amount'] ) {
+					$groups_template->bowe_codes->class  = $args['class'];
+					$groups_template->bowe_codes->avatar = $args['avatar'];
+					$groups_template->bowe_codes->size   = $args['size'];
+
+					if ( ! empty( $args['content'] ) ) {
+						$groups_template->bowe_codes->content = $args['content'];
+					} else {
+						$groups_template->bowe_codes->content = false;
+					}
 
 
 					// adding a filter here so that plugins/themes can attach more datas to groups_template
-					$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $bowecodes_id, $args );
-
+					$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $args['bowecodes_id'], $args );
 
 					$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 
@@ -706,54 +756,61 @@ function bowe_codes_groups_tag( $args = '' ){
 
 					return $html_groups_box;
 				}
-
 			}
-
 		}
-
 	}
 
-	$group_args = array( 'type' => $type, 'per_page' => $amount, 'max' => $amount );
+	$group_args = array( 'type' => $args['type'], 'per_page' => $args['amount'], 'max' => $args['amount'] );
 
-	if( !empty( $exclude_groups_from_loop ) && is_array( $exclude_groups_from_loop ) && count( $exclude_groups_from_loop ) > 0 )
+	if ( ! empty( $exclude_groups_from_loop ) && is_array( $exclude_groups_from_loop ) && count( $exclude_groups_from_loop ) > 0 ) {
 		$group_args['exclude'] = $exclude_groups_from_loop;
+	}
 
 	// faut vérifier ce truc !!
-	if( !empty( $user_groups ) ){
+	if ( ! empty( $args['user_groups'] ) ){
 
-		if ( bp_is_user() && $dynamic )
+		if ( bp_is_user() && $args['dynamic'] ) {
 			$user_id = bp_displayed_user_id();
-		else
+		} else {
 			$user_id = bp_loggedin_user_id();
+		}
 
-		if( !empty( $user_id ) )
+		if ( ! empty( $user_id ) ) {
 			$group_args['user_id'] = $user_id;
-		else
+		} else {
 			return $html_groups_box;
+		}
 	}
 
 	$group_args = apply_filters( 'bowe_codes_groups_tag_args', $group_args, $args );
+	$group_filter = 'bowe_codes_groups_global';
 
 	if( bp_has_groups( $group_args ) ){
-		//attaching bowe codes settings in members_template
-		$groups_template->bowe_codes = new stdClass();
-		$groups_template->bowe_codes->class = $class;
-		$groups_template->bowe_codes->avatar = $avatar;
-		$groups_template->bowe_codes->size = $size;
-		$groups_template->bowe_codes->content = !empty( $content ) ? $content : false;
+		//attaching bowe codes settings in groups_template
+		$groups_template->bowe_codes         = new stdClass();
+		$groups_template->bowe_codes->class  = $args['class'];
+		$groups_template->bowe_codes->avatar = $args['avatar'];
+		$groups_template->bowe_codes->size   = $args['size'];
 
-		if( !empty( $user_id ) )
+		if ( ! empty( $args['content'] ) ) {
+			$groups_template->bowe_codes->content = $args['content'];
+		} else {
+			$groups_template->bowe_codes->content = false;
+		}
+
+		if ( ! empty( $user_id ) ) {
 			$groups_template->bowe_codes->backpat = array( 'bc' => 'bc_user_groups' );
-
-		else
-			$groups_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+			$group_filter .= '_user_groups';
+		} else {
+			$groups_template->bowe_codes->backpat = array( 'bc' => $args['bowecodes_id'] );
+		}
 
 		// adding a filter here so that plugins/themes can attach more datas to groups_template
-		$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_global', $groups_template->bowe_codes, $bowecodes_id, $args );
+		$groups_template->bowe_codes = apply_filters( $group_filter, $groups_template->bowe_codes, $args['bowecodes_id'], $args );
 
 		//we need to eventually merge with featured groups !
 		$groups_template->groups = array_merge( $featured_groups, $groups_template->groups );
-		$groups_template->groups = array_slice( $groups_template->groups, 0, $amount );
+		$groups_template->groups = array_slice( $groups_template->groups, 0, $args['amount'] );
 
 		$groups_template->group_count = count( $groups_template->groups );
 		$groups_template->total_group_count += count( $featured_groups );
@@ -765,8 +822,9 @@ function bowe_codes_groups_tag( $args = '' ){
 	$groups_template = $cached_groups_template;
 
 	//restoring current group from cached one
-	if( !empty( $cached_current_group ) )
+	if ( ! empty( $cached_current_group ) ) {
 		$bp->groups->current_group->slug = $cached_current_group;
+	}
 
 	return $html_groups_box;
 }
@@ -787,44 +845,50 @@ function bowe_codes_group_users_tag( $args = '' ) {
 	// caching members template
 	$cached_members_template = $members_template;
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
-
-	$bc_group_id = groups_get_id( $slug );
+	$bc_group_id = groups_get_id( $args['slug'] );
 	$html_members_box = '';
 
-	if( empty( $bc_group_id ) )
+	if ( empty( $bc_group_id ) ) {
 		return false;
+	}
 
-	if( empty( $bowecodes_id ) )
-		$bowecodes_id = 'bc_group_users';
+	if ( empty( $args['bowecodes_id'] ) ) {
+		$args['bowecodes_id'] = 'bc_group_users';
+	}
 
 	// for plugins and themes if they need to use different template parts for this shortcode
-	$template_part = apply_filters( 'bowe_codes_group_users_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groupmembers' ), $bowecodes_id, $args );
+	$template_part = apply_filters( 'bowe_codes_group_users_get_template_part', array( 'slug' => 'bowecodes' , 'name' => 'groupmembers' ), $args['bowecodes_id'], $args );
 
 	$group_users_arg = array(
-			'exclude_admins_mods' => 0,
-			'group_id' => $bc_group_id,
-			'max' => $amount,
-			'per_page' => $amount,
+		'exclude_admins_mods' => 0,
+		'group_id'            => $bc_group_id,
+		'max'                 => $args['amount'],
+		'per_page'            => $args['amount'],
 	);
 
 	$group_users_arg = apply_filters( 'bowe_codes_group_users_tag_args', $group_users_arg, $args );
 
 	if ( bp_group_has_members( $group_users_arg ) ) {
 		//attaching bowe codes settings in members_template
-		$members_template->bowe_codes = new stdClass();
-		$members_template->bowe_codes->class = $class;
-		$members_template->bowe_codes->avatar = $avatar;
-		$members_template->bowe_codes->size = $size;
-		$members_template->bowe_codes->content = !empty( $content ) ? $content : false;
+		$members_template->bowe_codes         = new stdClass();
+		$members_template->bowe_codes->class  = $args['class'];
+		$members_template->bowe_codes->avatar = $args['avatar'];
+		$members_template->bowe_codes->size   = $args['size'];
 
-		$members_template->bowe_codes->backpat = array( 'bc' => $bowecodes_id );
+		if ( ! empty( $args['content'] ) ) {
+			$members_template->bowe_codes->content = $args['content'];
+		} else {
+			$members_template->bowe_codes->content = false;
+		}
+
+		$members_template->bowe_codes->backpat = array( 'bc' => $args['bowecodes_id'] );
 
 		// adding a filter here so that plugins/themes can attach more datas to members_template
-		$members_template->bowe_codes = apply_filters( 'bowe_codes_group_users_global', $members_template->bowe_codes, $bowecodes_id, $args, $group_users_arg );
+		$members_template->bowe_codes = apply_filters( 'bowe_codes_group_users_global', $members_template->bowe_codes, $args['bowecodes_id'], $args, $group_users_arg );
 
 		$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
 	}
@@ -847,50 +911,44 @@ function bowe_codes_group_users_tag( $args = '' ) {
  * @return string the restricted content or a warning message
  */
 function bowe_code_hide_post_content_tag( $args = '' ) {
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
-
-	extract( $args, EXTR_SKIP );
+	}
 
 	$bc_group_id = false;
 
 	// if no group id content is return
-	if( empty( $group_id ) )
+	if ( empty( $args['group_id'] ) ) {
 		return __( 'No group id or group slug were given', 'bowe-codes' );
-
-	if( is_numeric( $group_id ) )
-		$bc_group_id = $group_id;
-	else
-		$bc_group_id = groups_get_id( $group_id );
-
-	if( empty( $bc_group_id ) )
-		return __( 'The group slug given is unknown', 'bowe-codes' );
-
-	// if user not logeddin, he's asked to
-	if( !is_user_logged_in() ) {
-
-		$message_unlogged = '<p class="'.$class.'">' . __('You must be loggedin to access to this content', 'bowe-codes') . '</p>';
-		return apply_filters( 'bowe_code_hide_post_unconnect_message', $message_unlogged );
 	}
 
+	if ( is_numeric( $args['group_id'] ) ) {
+		$bc_group_id = $args['group_id'];
+	} else {
+		$bc_group_id = groups_get_id( $args['group_id'] );
+	}
+
+	if ( empty( $bc_group_id ) ) {
+		return __( 'The group slug given is unknown', 'bowe-codes' );
+	}
+
+	// if user not logeddin, he's asked to
+	if( ! is_user_logged_in() ) {
+		$message_unlogged = '<p class="' . $args['class'] . '">' . esc_html__('You must be loggedin to access to this content', 'bowe-codes') . '</p>';
+		return apply_filters( 'bowe_code_hide_post_unconnect_message', $message_unlogged );
+	}
 
 	$user_id = bp_loggedin_user_id();
 
 	// if the user is a group member, let's return the content
-	if ( groups_is_user_member( $user_id, $bc_group_id ) )
-		return $content;
-
-	else {
-
+	if ( groups_is_user_member( $user_id, $bc_group_id ) ) {
+		return $args['content'];
+	} else {
 		$group = groups_get_group( array( 'group_id' => $bc_group_id ) );
-		$group_home = bp_get_group_permalink( $group );
-		$group_name = $group->name;
-		$message_notgm = '<p class="'.$class.'">' . sprintf(__('You must be a member of the group %s to access this content', 'bowe-codes'), '<a href='.$group_home.'>'.$group_name.'</a>') . '</p>';
+		$message_notgm = '<p class="' . $args['class'] . '">' . sprintf( __('You must be a member of the group %s to access this content', 'bowe-codes'), '<a href="' . bp_get_group_permalink( $group ) . '">' . $group->name. '</a>' ) . '</p>';
 
 		return apply_filters( 'bowe_code_hide_post_connect_message', $message_notgm, $bc_group_id );
-
-		}
-
+	}
 }
 
 /** Messages ******************************************************/
@@ -976,15 +1034,17 @@ function bowe_codes_messages_tag( $args = '' ){
  */
 function bowe_codes_html_blog( $blog_id, $avatar, $size, $desc ){
 	$blog_html = '';
+	$site_url = get_blog_option( $blog_id, 'siteurl' );
 
-	if( !empty( $avatar ) )
-		$blog_html .= '<div class="bc_avatar"><a href="'.get_blog_option( $blog_id, 'siteurl' ).'">'.get_avatar(get_blog_option( $blog_id, 'admin_email' ), $size ).'</a></div>';
+	if ( ! empty( $avatar ) ) {
+		$blog_html .= '<div class="bc_avatar"><a href="' . esc_url( $site_url ) . '">'. get_avatar( get_blog_option( $blog_id, 'admin_email' ), $size ) . '</a></div>';
+	}
 
 	$blog_html .= '<div class="blog-infos">';
-	$blog_html .= '<h4><a href="'.get_blog_option('siteurl',$blog_id).'">'.get_blog_option( $blog_id, 'blogname' ).'</a></h4>';
+	$blog_html .= '<h4><a href="' . esc_url( $site_url ) . '">' . esc_html( get_blog_option( $blog_id, 'blogname' ) ) . '</a></h4>';
 
 	if( !empty( $desc ) )
-		$blog_html .= '<p>'.get_blog_option( $blog_id, 'blogdescription' ).'</p>';
+		$blog_html .= '<p>' . esc_html( get_blog_option( $blog_id, 'blogdescription' ) ) . '</p>';
 
 	$blog_html .= '</div>';
 
@@ -1006,62 +1066,70 @@ function bowe_codes_blogs_tag( $args = '' ){
 	global $blog_id, $blogs_template;
 
 	// not available for children !
-	if( $blog_id != bp_get_root_blog_id() )
+	if ( $blog_id != bp_get_root_blog_id() ) {
 		return false;
+	}
 
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
-
-	$html_blogs_box = '<div class="'.$class.'">';
+	$html_blogs_box = '<div class="' . $args['class'] . '">';
 	$exclude_blogs_from_loop = array();
 
-	if( !empty( $featured ) ){
+	if ( ! empty( $args['featured'] ) ){
 
-		$featured_list = explode( ',', $featured );
+		$featured_list = explode( ',', $args['featured'] );
 
-		if( count( $featured_list ) > 0 ){
+		if ( count( $featured_list ) > 0 ){
 
 			$html_blogs_box .= '<div class="featured">';
-			$html_blogs_box .='<ul class="'.$class.'-ul">';
+			$html_blogs_box .='<ul class="' . $args['class'] . '-ul">';
 
-			foreach( $featured_list as $feat_ids ){
-				$exclude_blogs_from_loop[]=$feat_ids;
-				$html_blogs_box .= '<li>'.bowe_codes_html_blog( $feat_ids, $avatar, $size, $desc ).'</li>';
+			foreach ( $featured_list as $feat_ids ){
+				$exclude_blogs_from_loop[] = $feat_ids;
+				$html_blogs_box .= '<li> '. bowe_codes_html_blog( $feat_ids, $args['avatar'], $args['size'], $args['desc'] ) . '</li>';
 			}
 			$html_blogs_box .='</ul></div>';
 		}
 
-		if( count( $featured_list ) == $amount ){
-			return $html_blogs_box.'</div>';
+		if ( count( $featured_list ) == $args['amount'] ){
+			return $html_blogs_box . '</div>';
 		}
-
 	}
-	if( bp_has_blogs( array( 'type' => $type, 'per_page' => $amount, 'max' => $amount ) ) ) {
 
-		$html_blogs_box .= '<ul class="'.$class.'-ul">';
+	$blogs_args = apply_filters( 'bowe_codes_blogs_tag_args', array(
+		'user_id'  => false,           // make sure to list all blogs even if seeing a single user
+		'type'     => $args['type'],
+		'per_page' => $args['amount'],
+		'max'      => $args['amount']
+	) );
+
+	if ( bp_has_blogs( $blogs_args ) ) {
+
+		$html_blogs_box .= '<ul class="' . $args['class'] . '-ul">';
 		$i=1;
 		$j=0;
 		while ( bp_blogs() ){
 			bp_the_blog();
 
-			$check = $amount - count($exclude_blogs_from_loop);
+			$check = $args['amount'] - count( $exclude_blogs_from_loop );
 
-			if( isset( $exclude_blogs_from_loop ) && in_array( $blogs_template->blogs[$j]->blog_id, $exclude_blogs_from_loop ) )
-					$i-=1 ;
-			elseif( $i <= $amount - count( $exclude_blogs_from_loop ) ){
-				if( !empty( $avatar ) )
-					$html_blogs_box .= '<li><div class="bc_avatar"><a href="'.bp_get_blog_permalink().'">'.bp_get_blog_avatar('width='.$size.'&height='.$size) . '</a></div>';
-
-				else
+			if ( isset( $exclude_blogs_from_loop ) && in_array( $blogs_template->blogs[ $j ]->blog_id, $exclude_blogs_from_loop ) ) {
+				$i-=1;
+			} else if ( $i <= $args['amount'] - count( $exclude_blogs_from_loop ) ) {
+				if ( ! empty( $args['avatar'] ) ) {
+					$html_blogs_box .= '<li><div class="bc_avatar"><a href="' . bp_get_blog_permalink() . '">' . bp_get_blog_avatar( array( 'width' => $args['size'], 'height' => $args['size'] ) ) . '</a></div>';
+				} else {
 					$html_blogs_box .= '<li>';
+				}
 
 				$html_blogs_box .= '<div class="blog-infos">';
-				$html_blogs_box .= '<h4><a href="'.bp_get_blog_permalink().'">'.bp_get_blog_name().'</a></h4>';
+				$html_blogs_box .= '<h4><a href="' . bp_get_blog_permalink() . '">' . bp_get_blog_name() . '</a></h4>';
 
-				if( !empty( $desc ) )
-					$html_blogs_box .= '<p>'.bp_get_blog_description().'</p>';
+				if ( ! empty( $args['desc'] ) ) {
+					$html_blogs_box .= '<p>' . bp_get_blog_description() . '</p>';
+				}
 
 				$html_blogs_box .= '</div></li>';
 			}
@@ -1070,6 +1138,7 @@ function bowe_codes_blogs_tag( $args = '' ){
 			$j+=1;
 		}
 	}
+
 	$html_blogs_box .='</ul></div>';
 	return $html_blogs_box;
 }
@@ -1086,11 +1155,11 @@ function bowe_codes_blogs_tag( $args = '' ){
  * @return array the list of activities or warning message
  */
 function bowe_codes_activity_list_types() {
-
-	if( bp_is_active( 'activity' ) && function_exists( 'bp_activity_get_types' ) )
+	if ( bp_is_active( 'activity' ) && function_exists( 'bp_activity_get_types' ) ) {
 		return bp_activity_get_types();
-	else
+	} else {
 		return array( 'activity_update' => 'BuddyPress 1.7 is required' );
+	}
 }
 
 /**
@@ -1101,32 +1170,40 @@ function bowe_codes_activity_list_types() {
  * @return string html for the list of activities
  */
 function bowe_codes_activity_tag( $args = '' ) {
-	if( !is_array( $args ) )
+	if ( ! is_array( $args ) ) {
 		return false;
+	}
 
-	extract( $args, EXTR_SKIP );
-
-	$html_activity_box = '<div class="'.$class.'">';
+	$html_activity_box = '<div class="' . $args['class'] . '">';
 
 	$activity_args = array(
-			'action' => $type,
-			'max' => $amount,
-			'per_page' => $amount
+		'action'   => $args['type'],
+		'max'      => $args['amount'],
+		'per_page' => $args['amount']
 	);
 
 	$activity_args = apply_filters( 'bowe_codes_activity_tag_arg', $activity_args, $args );
 
 	if( bp_has_activities( $activity_args ) ) {
 
-		$html_activity_box .= '<ul class="'.$class.'-ul">';
+		$html_activity_box .= '<ul class="' . $args['class'] . '-ul">';
 
 		while ( bp_activities() ) {
 			bp_the_activity();
 
 			$html_activity_box .= '<li>';
 
-			if( !empty( $avatar ) )
-				$html_activity_box .= '<div class="bc_avatar"><a href="'.bp_get_activity_user_link().'">'.bp_core_fetch_avatar( 'item_id='. bp_get_activity_user_id() .'&type=full&width='. $size .'&height='. $size ) . '</a></div>';
+			if ( ! empty( $args['avatar'] ) ) {
+				$html_activity_box .= '<div class="bc_avatar"><a href="' . bp_get_activity_user_link() . '">';
+				$html_activity_box .= bp_core_fetch_avatar( array(
+					'item_id' => bp_get_activity_user_id(),
+					'type'    => 'full',
+					'width'   => $args['size'],
+					'height'  => $args['size'],
+				) );
+
+				$html_activity_box .= '</a></div>';
+			}
 
 			$html_activity_box .= '<div class="activity-infos">';
 			$html_activity_box .= apply_filters( 'bowe_codes_activity_before_action', '' );
