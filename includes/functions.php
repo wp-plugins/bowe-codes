@@ -239,7 +239,7 @@ function bowe_codes_member_tag( $args = '' ) {
 	$user_id = bp_core_get_userid( $args['name'] );
 
 	if ( empty( $user_id ) ) {
-		return false;
+		return '<p class="my_noitems_message">' . esc_html__( 'No member found', 'bowe-codes' ) . '</p>';
 	}
 
 	if ( empty( $args['class'] ) ) {
@@ -345,7 +345,7 @@ function bowe_codes_members_tag( $args = '' ){
 
 			$featured_arg = apply_filters( 'bowe_codes_members_tag_featured_args', array( 'include' => $exclude_members_from_loop, 'max' => $args['amount'] ), $args );
 
-			if( bp_has_members( $featured_arg ) ){
+			if ( bp_has_members( $featured_arg ) ){
 				//attaching bowe codes settings in members_template
 				$members_template->bowe_codes = new stdClass();
 
@@ -373,9 +373,7 @@ function bowe_codes_members_tag( $args = '' ){
 					return $html_members_box;
 				}
 			}
-
 		}
-
 	}
 
 	$user_id = 0;
@@ -597,7 +595,7 @@ function bowe_codes_group_tag( $args = '' ){
 	$bc_group_id = groups_get_id( $args['slug'] );
 
 	if ( empty( $bc_group_id ) ) {
-		return false;
+		return '<p class="my_noitems_message">' . esc_html__( 'No group found', 'bowe-codes' ) . '</p>';
 	}
 
 	if ( empty( $args['class'] ) ) {
@@ -745,7 +743,6 @@ function bowe_codes_groups_tag( $args = '' ){
 						$groups_template->bowe_codes->content = false;
 					}
 
-
 					// adding a filter here so that plugins/themes can attach more datas to groups_template
 					$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $args['bowecodes_id'], $args );
 
@@ -785,7 +782,7 @@ function bowe_codes_groups_tag( $args = '' ){
 	$group_args = apply_filters( 'bowe_codes_groups_tag_args', $group_args, $args );
 	$group_filter = 'bowe_codes_groups_global';
 
-	if( bp_has_groups( $group_args ) ){
+	if ( bp_has_groups( $group_args ) ) {
 		//attaching bowe codes settings in groups_template
 		$groups_template->bowe_codes         = new stdClass();
 		$groups_template->bowe_codes->class  = $args['class'];
@@ -816,6 +813,33 @@ function bowe_codes_groups_tag( $args = '' ){
 		$groups_template->total_group_count += count( $featured_groups );
 
 		$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
+
+	// Fetch the featured group !
+	} else if ( ! empty( $featured_groups ) ) {
+		$groups_template->groups            = $featured_groups;
+		$groups_template->group_count       = count( $featured_groups );
+		$groups_template->total_group_count = $groups_template->group_count;
+
+		//attaching bowe codes settings in groups_template
+		$groups_template->bowe_codes         = new stdClass();
+		$groups_template->bowe_codes->class  = $args['class'];
+		$groups_template->bowe_codes->avatar = $args['avatar'];
+		$groups_template->bowe_codes->size   = $args['size'];
+
+		if ( ! empty( $args['content'] ) ) {
+			$groups_template->bowe_codes->content = $args['content'];
+		} else {
+			$groups_template->bowe_codes->content = false;
+		}
+
+		// adding a filter here so that plugins/themes can attach more datas to groups_template
+		$groups_template->bowe_codes = apply_filters( 'bowe_codes_groups_featured_global', $groups_template->bowe_codes, $args['bowecodes_id'], $args );
+
+		$html_groups_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
+
+	// Display a message to inform no group were found
+	} else {
+		$html_groups_box = '<p class="my_noitems_message">' . esc_html__( 'No group found', 'bowe-codes' ) . '</p>';
 	}
 
 	//restoring groups template from cached one
@@ -891,6 +915,10 @@ function bowe_codes_group_users_tag( $args = '' ) {
 		$members_template->bowe_codes = apply_filters( 'bowe_codes_group_users_global', $members_template->bowe_codes, $args['bowecodes_id'], $args, $group_users_arg );
 
 		$html_members_box = bowe_codes_buffer_template_part( $template_part['slug'], $template_part['name'] );
+
+	// Display a message to inform no member were found for this group
+	} else {
+		$html_members_box = '<p class="my_noitems_message">' . esc_html__( 'No member found', 'bowe-codes' ) . '</p>';
 	}
 
 	//restoring groups template from cached one

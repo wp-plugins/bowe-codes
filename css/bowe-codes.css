@@ -78,7 +78,7 @@
 }
 
 .my_member .my_member-ul li .user-infos h4,
-.my_members .my_members-ul li .user-infos h4, 
+.my_members .my_members-ul li .user-infos h4,
 .my_friends .my_friends-ul li .user-infos h4,
 .my_groups .my_groups-ul li .group-infos h4,
 .group_users .group_users-ul li .user-infos h4,
@@ -132,13 +132,14 @@
     margin: 0 10px 5px 0;
 }
 
-.my_restrict_message { 
+.my_restrict_message,
+.my_noitems_message {
     display: block;
     border:solid 1px #E1CA82;
     border-radius:3px;
     padding: 10px 15px;
-    background-color: #FFEAA6; 
-    width:80%; 
+    background-color: #FFEAA6;
+    width:80%;
     margin:1em auto;
 }
 
